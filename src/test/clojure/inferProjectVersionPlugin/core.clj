@@ -1,40 +1,49 @@
 (ns inferProjectVersionPlugin.core
-  (:use [clojure.test]
-        [clojure.java.shell]))
+  (:use clojure.test
+        clojure.java.shell
+        [clojure.string :only [trim-newline blank?] ] ))
+;  (:require [clojure.string :as string)
 
+
+;; utility vars and funs
 (def git-project-dir (str maven-target-dir "/sample_project"))
 
-(defn sample-git-project-fixture [run-tests-fn]
-  "Creates an example GIT project with branches and tags set to test different scenarios"
-  (println "FERD setup test!")
-  (println (str "Compile path=" *compile-path*))
-  (println (str "maven-target-dir=" maven-target-dir))
-  (println (str "maven-script-source-dir=" maven-script-source-dir))
-  (println (str "maven-bash-source-dir=" maven-bash-source-dir))
-  (let [script (sh (str maven-bash-source-dir "/create-sample-git-project.sh") git-project-dir)]
-    (println (script :out))
-    (if-not (= 0 (script :exit)) (println (script :err)))
-    (is (= 0 (script :exit))))
-  (run-tests-fn))
-
-(use-fixtures :once sample-git-project-fixture)
+(defn run-git [args]
+  (sh "bash" "-c" (str "cd " git-project-dir "; git " args)))
 
 (defn get-commit-hash-by-description [descr]
-  (let [git-cmd (str "cd " git-project-dir  "; git log --format=format:%H --grep='" descr "'")
-        git (sh "bash" "-c" git-cmd)
+  (let [git (run-git (str "log --format=format:%H --grep='" descr "'"))
         commit-hash (:out git)]
-    (is (not (empty? commit-hash)))
+    (is (not (blank? commit-hash)))
     commit-hash))
 
-(defn git-checkout [hash]
-  (sh "bash" "-c" (str "cd " git-project-dir "; git checkout " hash)))
-
 (defn infer-project-version []
-  (:out (sh "bash" "-c" (str "cd " git-project-dir "; git describe"))))
+  (trim-newline (:out (run-git "describe"))))
 
-(deftest test-infer-project-version-A
-  ;; checkout on a particular commit and validate inferred version is the expected one
-  (let [commit-hash (get-commit-hash-by-description "dev commit 5")]
-    (git-checkout commit-hash)
-    (println (str "infered project version=" (infer-project-version)))))
+;; fixtures
+(defn sample-git-project-fixture [run-tests-fn]
+  "Creates an example GIT project with branches and tags set to test different scenarios"
+  (println "Building example GIT project for testing...")
+  (let [script (sh (str maven-bash-source-dir "/create-sample-git-project.sh") git-project-dir)
+        exit-OK (= 0 (script :exit)) ]
+    (println (script :out))
+    (if-not exit-OK
+      (println (script :err)))
+    (is exit-OK)
+
+    (run-tests-fn)))
+
+;(use-fixtures :once sample-git-project-fixture)
+
+;; tests
+(defn expect-version-for-commit [commit-descr expected-version]
+  "Checkout on a particular commit and validate inferred version is the expected one"
+  (let [commit-hash (get-commit-hash-by-description commit-descr)]
+    (run-git (str "checkout " commit-hash))
+    (is (= (infer-project-version) expected-version) (str "Testing commit with description: " commit-descr))))
+  
+(deftest test-infer-project-versions
+  (expect-version-for-commit "dev commit 5" "1.0.0")
+  (expect-version-for-commit "dev commit 1" "1.0.0")
+  )
 
