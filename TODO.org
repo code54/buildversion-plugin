@@ -1,15 +1,23 @@
 * NEXT? Build minimal and clean Mojo in Clojure
 * TODO implement extraction of current version from git tags
-* TODO Write Mojo integration test
 ** DONE put together git repo as fixture
-** Each test checks out a particular version and copies a pom.xml onto it
+** DONE pick unit testing framework for clojure
+** DONE May be we need to use zi (or clojure-maven-plugin) to be able to run tests
+** DONE Write tests to checkout a particular version and assert expected version
+** DONE Implement simple version extraction to make tests pass
+** TODO Implement map with all type of versions we need
+   * artifact version
+   * full label (human)
+   * full packaging version (rpm)
+   * ?????
+** TODO Complete test scenarios for all corner cases
+* TODO Write Mojo integration test
+** TODO Call version-extraction logic from Mojo
 ** TODO write sample pom.xml/project
 ** TODO Hook it with maven-invoker-plugin
-** Use TDD
-*** pick unit testing framework for clojure
-*** May be we need to use zi (or clojure-maven-plugin) to be able to run tests
-** Impl1: shelling out to "git" command
-** Impl2: how about using JGit ?
-* TODO Call version-extraction logic from Mojo
+*** write basic assertion to validate Mojo integration
+* TODO Generalize protocol for potential non-git implementations
+** separate mojo vs. core
+* SOMEDAY how about using JGit ?
 * TODO Learn a bit about Plexus and how Maven uses it
 ** TODO Figure out what clojure-maven-plexus-compiler is for exactly

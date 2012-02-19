@@ -92,6 +92,13 @@
     </dependency>
 
     <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>tools.trace</artifactId>
+      <version>0.7.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.cloudhoist</groupId>
       <artifactId>clojure-maven-mojo-annotations</artifactId>
       <version>${clojureMaven.version}</version>
