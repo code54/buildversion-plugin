@@ -12,8 +12,8 @@
    * [X] timestamp
 ** TODO Complete test scenarios for all corner cases
 * TODO Hook it with maven, Mojo
-** TODO Call version-extraction logic from Mojo
-** TODO Test on a basic project *from a branch new user* (with a clean ~/.m2)
+** DONE Call version-extraction logic from Mojo
+** TODO Test on a basic project *from a brand new user* (with a clean ~/.m2)
 ** TODO write sample pom.xml/project
 ** TODO Hook it with maven-invoker-plugin
 *** write basic assertion to validate Mojo integration

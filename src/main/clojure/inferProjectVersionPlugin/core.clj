@@ -15,7 +15,8 @@
 
 (deftype
     ^{Goal "simple"
-      RequiresDependencyResolution "test"}
+      RequiresDependencyResolution "test"
+      Phase "validate"}
     MyClojureMojo
   [
    ^{Parameter
@@ -23,7 +24,7 @@
    base-directory
 
    ^{Parameter
-     {:expression "${project}" :required true :readonly true}}
+     {:expression "${project}" :required true :readonly false}}
    project
 
    ;; ^{Parameter
@@ -48,9 +49,18 @@
 
   Mojo
   (execute [_]
-    (.info log (str "* Infering project version *" output-directory))
-    (.info log (str "* project.version = " (.getVersion project)))
-    )
+
+    (let [versions-map (git/infer-project-version ".")
+          props (.getProperties project)]
+      
+      (doall (map (fn [[ k v]] (.put props (name k) v)) versions-map))
+
+                                        ; inject project version
+      (.setVersion project (:maven-artifact-version versions-map))
+      (.info log (str "* Java class for 'project': " (class project)))
+      (.info log (str "* output-directory *" output-directory))
+      (.info log (str "* project.version = " (.getVersion project)))
+    ))
 
   (setLog [_ logger] (set! log logger))
   (getLog [_] log)
