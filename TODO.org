@@ -18,8 +18,24 @@
 ** TODO Hook it with maven-invoker-plugin
 *** write basic assertion to validate Mojo integration
 * TODO Make timestamp UTC ?
+* TODO Propose a defmojo macro for clojure-maven project?
+(defmojo
+  [:goal "simple" requires-dependency-resolution "test"]
+
+  base-directory   {:expression "${basedir}" :required true :readonly true}
+
+  project          {:expression "${project}" :required true :readonly true}
+  
+  output-directory {:defaultValue "${project.build.outputDirectory}" :required true}
+
+  log
+
+  plugin-context
+
+  (execute [_]
+           (.info log (str "* Infering project version *" output-directory))
+           (.info log (str "* project.version = " (.getVersion project)))))
 * TODO Generalize protocol for potential non-git implementations
-** separate mojo vs. core
 * SOMEDAY how about using JGit ?
 * TODO Learn a bit about Plexus and how Maven uses it
 ** TODO Figure out what clojure-maven-plexus-compiler is for exactly
