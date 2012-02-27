@@ -71,6 +71,7 @@
           <configuration>
               <initScript>
                   (require 'clojure.string)
+
                   (def maven-target-dir "${project.build.directory}")
                   (def maven-script-source-dir "${project.build.scriptSourceDirectory}")
                   (def maven-bash-source-dir

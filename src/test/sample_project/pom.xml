@@ -29,6 +29,29 @@
                 </executions>
 
             </plugin>
+
+		    <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-antrun-plugin</artifactId>
+		        <executions>
+		            <execution>
+		                <id>echo-stuff</id>
+		                <phase>initialize</phase>
+		                <goals>
+		                    <goal>run</goal>
+		                </goals>
+		                <configuration>
+		                    <tasks>
+		                        <echo message="descriptive-version: ${descriptive-version}" />
+		                        <echo message="maven-artifact-version: ${maven-artifact-version}" />
+		                        <echo message="packaging-version: ${packaging-version}" />
+		                        <echo message="tstamp-version: ${tstamp-version}" />
+
+		                    </tasks>
+		                </configuration>
+		            </execution>
+		        </executions>
+		    </plugin>
         </plugins>
     </build>
 

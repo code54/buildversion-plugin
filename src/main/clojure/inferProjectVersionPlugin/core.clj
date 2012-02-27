@@ -8,32 +8,10 @@
    org.apache.maven.plugin.Mojo
    org.apache.maven.plugin.MojoExecutionException)
   (:use clojure.java.shell
-        [clojure.string :only [trim-newline blank?] ] ))
-        [clojure.tools.trace :only [dotrace deftrace]] ))
-
-(defn run-git
-  ([args] (run-git "." args))
-  ([project-dir args] 
-     (sh "bash" "-c" (str "cd " project-dir "; git " args))))
-
-(defn infer-project-version [project-dir]
-  "Infer the current project version from information from the source-control system"
-
-  ;; first obtain most recent tag on current branch (always following "first-parent" on merges)
-  ;; Then we parse the version from the tag. Sample output we are parsing here:
-  ;; aa44944 (HEAD, tag: v9.9.9, origin/master, origin/HEAD, master) Changes...
-  ;; c3bc9ff (tag: v1.11.0) TMS: Add...
-  ;; c3bc9fx (tag: v1.10.0-dev) Blah blah...
-
-  (let [most-recent-tag (:out (run-git project-dir "log --oneline --decorate=short --first-parent | grep 'tag: v' | head -n1"))
-        matched-version (second (re-find #".*tag: (v\d+\.\d+\.\d+[-_\d\w]*)[\)\,].*"
-                                         most-recent-tag))
-    
-        ;; now call git-describe forcing it to match the tag we just found
-        git-described ((run-git project-dir (str "describe --tags --long --match " matched-version)) :out) ]
-
-    ;; remove leading "v"
-    (.substring (trim-newline git-described) 1)))
+        [inferProjectVersionPlugin.git :as git]
+        [clojure.string :only [trim-newline blank?] ]
+        ;[clojure.tools.trace :only [dotrace deftrace]]
+        ))
 
 (deftype
     ^{Goal "simple"

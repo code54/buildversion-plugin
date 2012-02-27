@@ -5,17 +5,19 @@
 ** DONE May be we need to use zi (or clojure-maven-plugin) to be able to run tests
 ** DONE Write tests to checkout a particular version and assert expected version
 ** DONE Implement simple version extraction to make tests pass
-** TODO Implement map with all type of versions we need
-   * artifact version
-   * full label (human)
-   * full packaging version (rpm)
-   * ?????
+** DONE Implement map with all type of versions we need
+   * [X] artifact version
+   * [X] full label (human)
+   * [X] full packaging version (rpm)
+   * [X] timestamp
 ** TODO Complete test scenarios for all corner cases
-* TODO Write Mojo integration test
+* TODO Hook it with maven, Mojo
 ** TODO Call version-extraction logic from Mojo
+** TODO Test on a basic project *from a branch new user* (with a clean ~/.m2)
 ** TODO write sample pom.xml/project
 ** TODO Hook it with maven-invoker-plugin
 *** write basic assertion to validate Mojo integration
+* TODO Make timestamp UTC ?
 * TODO Generalize protocol for potential non-git implementations
 ** separate mojo vs. core
 * SOMEDAY how about using JGit ?
