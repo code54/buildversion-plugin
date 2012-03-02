@@ -41,6 +41,7 @@
         git-described ((run-git dir (str "describe --tags --match " git-tag)) :out)
         git-described-long ((run-git dir (str "describe --tags --long --match " git-tag)) :out)
 
+        ;; TODO: handle NPE if there's no tag
         maven-artifact-version ((re-find #"v(.*)" git-tag) 1)
         after-tag (replace-first git-described-long git-tag "")
         [_, commits-ahead, commit-hash] (re-find #"-(\d+)-([\d\w]+)" after-tag)]
