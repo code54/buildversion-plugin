@@ -1,5 +1,5 @@
-* NEXT? Build minimal and clean Mojo in Clojure
-* TODO implement extraction of current version from git tags
+* DONE Build minimal and clean Mojo in Clojure
+* TODO Implement version extraction for GIT
 ** DONE put together git repo as fixture
 ** DONE pick unit testing framework for clojure
 ** DONE May be we need to use zi (or clojure-maven-plugin) to be able to run tests
@@ -10,32 +10,47 @@
    * [X] full label (human)
    * [X] full packaging version (rpm)
    * [X] timestamp
-** TODO Complete test scenarios for all corner cases
-* TODO Hook it with maven, Mojo
-** DONE Call version-extraction logic from Mojo
-** TODO Test on a basic project *from a brand new user* (with a clean ~/.m2)
-** TODO write sample pom.xml/project
+** TODO Add validation if expected maven-artifact-version doesn't match project.version (configurable for failure or warning)
+** TODO Make "walk first parent" logic configurable (cover both cases with tests)
+** TODO Complete test scenarios for corner cases
+** TODO Make pattern of tstamp-version configurable
+* TODO Rename project? buildversioning? versioning-properties-plugin?
+* TODO Implement Mojo
+** DONE Call GIT version-extraction logic from Mojo
+** DONE Test on a basic project *from a brand new user* (with a clean ~/.m2)
+** WAITING Typo on clojure-maven/pom.xml's reference to clojars repo
+** TODO Improve sample pom.xml/project
+*** add filtering of propeties file
+*** add field on jar MANIFEST
 ** TODO Hook it with maven-invoker-plugin
 *** write basic assertion to validate Mojo integration
-* TODO Make timestamp UTC ?
 * TODO Propose a defmojo macro for clojure-maven project?
 (defmojo
-  [:goal "simple" requires-dependency-resolution "test"]
+  "This is an example Maven Plugin written in Clojure"
+  {:goal "simple"
+   :requires-dependency-resolution "test"}
 
+  ;; Mojo parameters
   base-directory   {:expression "${basedir}" :required true :readonly true}
-
   project          {:expression "${project}" :required true :readonly true}
-  
   output-directory {:defaultValue "${project.build.outputDirectory}" :required true}
+  xxx              {}
 
-  log
-
-  plugin-context
-
+  ;; Do it!
   (execute [_]
-           (.info log (str "* Infering project version *" output-directory))
-           (.info log (str "* project.version = " (.getVersion project)))))
+       ;; 'log' and 'plugin-context' will be available automatically
+       (.info log (str "* Infering project version *" output-directory))
+       (.info log (str "* project.version = " (.getVersion project)))))
 * TODO Generalize protocol for potential non-git implementations
 * SOMEDAY how about using JGit ?
-* TODO Learn a bit about Plexus and how Maven uses it
+* SOMEDAY Learn a bit about Plexus and how Maven uses it
 ** TODO Figure out what clojure-maven-plexus-compiler is for exactly
+* -------------------------
+:DETAILS:
+# -*- mode: org; -*-
+#+TYP_TODO: TODO NEXT WAITING SOMEDAY | DONE
+#+STARTUP: hidestars
+#+DRAWERS: DETAILS FEEDSTATUS
+# mode:org
+# End:
+:END:
