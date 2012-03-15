@@ -1,4 +1,4 @@
-(ns inferProjectVersionPlugin.git
+(ns buildversion-plugin.git
   "GIT implementation to infer current project version"
   (:import java.util.Date java.text.SimpleDateFormat)
   (:use clojure.java.shell

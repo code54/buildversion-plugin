@@ -1,4 +1,4 @@
-(ns inferProjectVersionPlugin.core
+(ns buildversion-plugin.core
   "Simple Mojo in Clojure"
 
   (:use clojure.java.shell
@@ -7,7 +7,7 @@
         ;[clojure.tools.trace :only [dotrace deftrace]]
         )
   (:require [clojure.maven.mojo.log :as log]
-            [inferProjectVersionPlugin.git :as git]))
+            [buildversion-plugin.git :as git]))
 
 
 (defmojo MyClojureMojo

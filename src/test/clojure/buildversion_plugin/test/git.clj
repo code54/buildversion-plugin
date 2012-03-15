@@ -1,5 +1,5 @@
-(ns inferProjectVersionPlugin.test.git
-  (:use [inferProjectVersionPlugin.git :only [run-git infer-project-version] :as git]
+(ns buildversion-plugin.test.git
+  (:use [buildversion-plugin.git :only [run-git infer-project-version] :as git]
         clojure.test
         clojure.java.shell
         [clojure.java.io :only [file]]

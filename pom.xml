@@ -3,13 +3,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.code54.mojo.infer-project-version</groupId>
-  <artifactId>infer-project-version-plugin</artifactId>
+  <groupId>com.code54.mojo</groupId>
+  <artifactId>buildversion-plugin</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <name>infer-project-version-plugin</name>
-  <description>FIXME: write description</description>
+  <name>buildversion-plugin</name>
+  <description>Maven plugin to extract versioning information from the source
+  repository and make it available as properties in the maven project</description>
 
 
   <properties>

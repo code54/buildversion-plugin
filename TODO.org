@@ -1,5 +1,5 @@
 * DONE Build minimal and clean Mojo in Clojure
-* NEXT Rename project? buildversioning? versioning-properties-plugin?
+* DONE Rename project? buildversioning? versioning-properties-plugin?
 * TODO Implement Mojo
 ** DONE Call GIT version-extraction logic from Mojo
 ** DONE Test on a basic project *from a brand new user* (with a clean ~/.m2)
