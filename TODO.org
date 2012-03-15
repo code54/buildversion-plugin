@@ -1,4 +1,14 @@
 * DONE Build minimal and clean Mojo in Clojure
+* NEXT Rename project? buildversioning? versioning-properties-plugin?
+* TODO Implement Mojo
+** DONE Call GIT version-extraction logic from Mojo
+** DONE Test on a basic project *from a brand new user* (with a clean ~/.m2)
+** DONE Typo on clojure-maven/pom.xml's reference to clojars repo
+** NEXT Hook it with maven-invoker-plugin
+*** write basic assertion to validate Mojo integration
+** TODO Improve sample pom.xml/project
+*** add filtering of propeties file
+*** add field on jar MANIFEST
 * TODO Implement version extraction for GIT
 ** DONE put together git repo as fixture
 ** DONE pick unit testing framework for clojure
@@ -12,19 +22,12 @@
    * [X] timestamp
 ** TODO Add validation if expected maven-artifact-version doesn't match project.version (configurable for failure or warning)
 ** TODO Make "walk first parent" logic configurable (cover both cases with tests)
+** TODO Improve "first parent" impl to ensure it's fast on big repos
 ** TODO Complete test scenarios for corner cases
 ** TODO Make pattern of tstamp-version configurable
-* TODO Rename project? buildversioning? versioning-properties-plugin?
-* TODO Implement Mojo
-** DONE Call GIT version-extraction logic from Mojo
-** DONE Test on a basic project *from a brand new user* (with a clean ~/.m2)
-** WAITING Typo on clojure-maven/pom.xml's reference to clojars repo
-** TODO Improve sample pom.xml/project
-*** add filtering of propeties file
-*** add field on jar MANIFEST
-** TODO Hook it with maven-invoker-plugin
-*** write basic assertion to validate Mojo integration
-* TODO Propose a defmojo macro for clojure-maven project?
+** SOMEDAY how about using JGit ?
+* Propose a defmojo macro for clojure-maven project?
+** DONE Implement
 (defmojo
   "This is an example Maven Plugin written in Clojure"
   {:goal "simple"
@@ -41,10 +44,19 @@
        ;; 'log' and 'plugin-context' will be available automatically
        (.info log (str "* Infering project version *" output-directory))
        (.info log (str "* project.version = " (.getVersion project)))))
+** DONE Move to clojure-maven and send pull-request upstream
+** WAITING Improvements to have it accepted (like, better validations)
+   * [X] Use vary-meta
+   * [X] Write function keywords->JavaAnnotations, instead of hardcoded map
+   * [X] Assume body is the body of the execute function
+   * [X] and also wrap it in with-log
+   * [X] Update example comment and move it to the documentation of defmojo definition
+   * [X] Wrap mojo parameters in a vector
+   * [X] Add beter validations
+   * [X] Write basic unit tests
+   * [X] Formatting max 80 columns
 * TODO Generalize protocol for potential non-git implementations
-* SOMEDAY how about using JGit ?
 * SOMEDAY Learn a bit about Plexus and how Maven uses it
-** TODO Figure out what clojure-maven-plexus-compiler is for exactly
 * -------------------------
 :DETAILS:
 # -*- mode: org; -*-

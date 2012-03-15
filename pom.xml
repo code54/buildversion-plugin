@@ -13,7 +13,7 @@
 
 
   <properties>
-      <clojureMaven.version>0.3.1</clojureMaven.version>
+      <clojureMaven.version>0.3.2-SNAPSHOT</clojureMaven.version>
       <maven.version>3.0.3</maven.version>
   </properties>
 
@@ -80,6 +80,15 @@
           </configuration>
 
       </plugin>
+
+      <!-- testing swank -->
+      <plugin>
+          <groupId>com.theoryinpractise</groupId>
+          <artifactId>clojure-maven-plugin</artifactId>
+          <version>1.3.9</version>
+          <extensions>true</extensions>
+      </plugin>
+
     </plugins>
 
   </build>
@@ -101,13 +110,18 @@
 
     <dependency>
       <groupId>org.cloudhoist</groupId>
+      <artifactId>clojure-maven-mojo</artifactId>
+      <version>${clojureMaven.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cloudhoist</groupId>
       <artifactId>clojure-maven-mojo-annotations</artifactId>
       <version>${clojureMaven.version}</version>
     </dependency>
     <dependency>
         <groupId>org.cloudhoist</groupId>
         <artifactId>clojure-maven-plexus-component-factory</artifactId>
-        <version>0.3.1</version>
+        <version>${clojureMaven.version}</version>
         <scope>runtime</scope>
     </dependency>
 
