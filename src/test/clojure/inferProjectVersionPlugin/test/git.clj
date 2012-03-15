@@ -8,11 +8,10 @@
 
 ;; These vars are def'd in the pom.xml when tests are run by mvn's zi plugin.
 ;; I def some default values here for interactive development:
-;; (defonce maven-target-dir "/tmp/")
-;; (defonce maven-bash-source-dir "../../../bash/")
+;; (def maven-target-dir "/tmp")
+;; (def maven-bash-source-dir (.getCanonicalPath (java.io.File. "../../../bash")))
 ;; (println (str "*** maven-target-dir: " maven-target-dir))
 ;; (println (str "*** maven-bash-source-dir: " maven-bash-source-dir))
-
 
 
 ;;
@@ -48,9 +47,9 @@
               (:out (git/run-git sample-project-dir "--version")))))
 
 
-(defmacro expect-tag-given-logline [log-line, tag]
-  `(with-redefs [git/run-git (fn [ _# _#] {:out ~log-line} )] ; "mock" call to git log
-     (is (= (git/find-latest-tag-on-branch ".") ~tag))))
+(defn- expect-tag-given-logline [log-line, tag]
+  (with-redefs [git/run-git (fn [ _ _] {:out log-line} )] ; "mock" call to git log
+     (is (= (git/find-latest-tag-on-branch ".") tag))))
 
 (deftest test-find-latest-tag-on-branch
 

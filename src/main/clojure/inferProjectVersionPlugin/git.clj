@@ -12,19 +12,15 @@
 
 
 (defn find-latest-tag-on-branch [dir]
-
-  ;; obtain most recent tag on current branch (always following "first-parent" on merges)
+  "Obtain most recent tag on current branch (always following \"first-parent\" on merges)"
   (let [log-line
         (:out (run-git dir "log --oneline --decorate=short --first-parent | grep 'tag: v' | head -n1"))]
 
     (second (re-find #".*tag: (v\d+\.\d+\.\d+[-_\d\w]*)[\)\,].*" log-line))))
     
-
-
 (defn infer-project-version [dir]
   "Infer the current project version from tags on the source-control system"
 
-  ;; call git-describe forcing it to match the first tag we found
   ;; expected output:
   ;;   v1.2.0-SNAPSHOT-8-ge34733d
   ;;   v1.2.0-SNAPSHOT-0-xxxxxxxx
@@ -32,17 +28,17 @@
   ;;   v1.2.0-RC-SNAPSHOT-5-a3b4c533
   ;;   v1.2.0-3-a3b4c533
   ;;   v1.2.0-0-xxxxxxxx
-  (let [git-tag (find-latest-tag-on-branch dir)
-        commit-timestamp (-> (:out (run-git dir "log -n 1 --format='%ct'"))
+  (let [commit-timestamp (-> (:out (run-git dir "log -n 1 --format='%ct'"))
                              trim-newline
                              (Long/parseLong)
                              (* 1000)
                              Date.)
-        git-described ((run-git dir (str "describe --tags --match " git-tag)) :out)
+        ;; call git-describe forcing it to match the latest tag we found
+        git-tag (find-latest-tag-on-branch dir)
+        git-described (:out (run-git dir (str "describe --tags --match " git-tag)))
         git-described-long ((run-git dir (str "describe --tags --long --match " git-tag)) :out)
 
-        ;; TODO: handle NPE if there's no tag
-        maven-artifact-version ((re-find #"v(.*)" git-tag) 1)
+        maven-artifact-version ((re-find #"v(.*)" git-tag) 1);; TODO: handle NPE if there's no tag
         after-tag (replace-first git-described-long git-tag "")
         [_, commits-ahead, commit-hash] (re-find #"-(\d+)-([\d\w]+)" after-tag)]
 
@@ -54,3 +50,4 @@
      :packaging-version commits-ahead
      :tstamp-version (. (SimpleDateFormat. "yyyyMMddHHmmss") format commit-timestamp)
      :commit-version "hash-here"}))
+
