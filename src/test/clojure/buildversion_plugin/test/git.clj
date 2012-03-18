@@ -8,8 +8,9 @@
 
 ;; These vars are def'd in the pom.xml when tests are run by mvn's zi plugin.
 ;; I def some default values here for interactive development:
-;; (def maven-target-dir "/tmp")
-;; (def maven-bash-source-dir (.getCanonicalPath (java.io.File. "../../../bash")))
+(def maven-target-dir "/tmp")
+(def maven-bash-source-dir (.getCanonicalPath (java.io.File.
+                                               "./src/test/bash")))
 ;; (println (str "*** maven-target-dir: " maven-target-dir))
 ;; (println (str "*** maven-bash-source-dir: " maven-bash-source-dir))
 
@@ -63,7 +64,7 @@
   "Given a git commit description, it returns the hash of a commit matching that description"
   (let [git (git/run-git sample-project-dir (str "log --all --format=format:%H --grep='^" descr "$'"))
         commit-hash (:out git)]
-    (is (not (blank? commit-hash)))
+    (is (not (blank? commit-hash)) (str "Couldn't find hash for commit descr" descr))
     commit-hash))
 
 (defn assert-for-commit [commit-descr expected-patterns]
@@ -83,25 +84,36 @@
 
 (deftest test-infer-project-versions
 
+  (assert-for-commit "First tagged commit"
+                     {:descriptive-version    #"^1.0.0-SNAPSHOT$"
+                      :maven-artifact-version #"^1.0.0-SNAPSHOT$"
+                      :packaging-version      #"0"
+                      :tstamp-version         #"\d+"
+                      :commit-version         #"[a-f\d]+"
+                      })
 
-  (assert-for-commit "Initial commit" {:descriptive-version    #"^1.0.0-SNAPSHOT$"
-                                       :maven-artifact-version #"^1.0.0-SNAPSHOT$"
-                                       :packaging-version      #"0"
-                                       :tstamp-version         #"\d+"
-                                       :commit-version         #"[a-f\d]+"
-                                       })
+  (assert-for-commit "dev commit 5"
+                     {:descriptive-version      #"1.1.0-SNAPSHOT"
+                      :maven-artifact-version   #"^1.1.0-SNAPSHOT$"
+                      :packaging-version        #"7"
+                      :tstamp-version           #"\d+"
+                      :commit-version           #"[a-f\d]+"
+                      })
 
-  (assert-for-commit "dev commit 5" {:descriptive-version      #"1.1.0-SNAPSHOT"
-                                     :maven-artifact-version   #"^1.1.0-SNAPSHOT$"
-                                     :packaging-version        #"6"
-                                     :tstamp-version           #"\d+"
-                                     :commit-version           #"[a-f\d]+"
-                                     })
+  (assert-for-commit "dev commit 1"
+                     {:descriptive-version      #"^1.0.0-SNAPSHOT-1.*"
+                      :maven-artifact-version   #"^1.0.0-SNAPSHOT"
+                      :packaging-version        #"1"
+                      :tstamp-version           #"\d+"
+                      :commit-version           #"[a-f\d]+"
+                      })
 
-  (assert-for-commit "dev commit 1" {:descriptive-version      #"^1.0.0-SNAPSHOT-1.*"
-                                     :maven-artifact-version   #"^1.0.0-SNAPSHOT"
-                                     :packaging-version        #"1"
-                                     :tstamp-version           #"\d+"
-                                     :commit-version           #"[a-f\d]+"
-                                     }))
+  ;; No tag is reacheable from this commit:
+  (assert-for-commit "Initial commit. Before any tag"
+                     {:descriptive-version      #"N/A"
+                      :maven-artifact-version   #"N/A"
+                      :packaging-version        #"0"
+                      :tstamp-version           #"\d+"
+                      :commit-version           #"[a-f\d]+"
+                      }))
 

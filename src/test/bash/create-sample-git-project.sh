@@ -9,11 +9,15 @@ cd $TARGET_DIR
 
 git init
 > README.txt
+
+git add README.txt
+git ci -m "Initial commit. Before any tag"
+
 > README-release.txt
 > README-master.txt
 
 git add README*
-git ci -m "Initial commit"
+git ci -m "First tagged commit"
 
 git branch develop
 git branch release
