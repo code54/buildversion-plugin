@@ -4,9 +4,10 @@
 ** DONE Call GIT version-extraction logic from Mojo
 ** DONE Test on a basic project *from a brand new user* (with a clean ~/.m2)
 ** DONE Typo on clojure-maven/pom.xml's reference to clojars repo
-** NEXT Hook it with maven-invoker-plugin
-*** write basic assertion to validate Mojo integration
-** TODO Improve sample pom.xml/project
+** TODO Maven Integration tests
+*** DONE Hook it with maven-invoker-plugin
+*** DONE write basic assertion (verify.sh) to validate Mojo's output
+** TODO Write example pom.xml/project (may be same as integration test?)
 *** add filtering of propeties file
 *** add field on jar MANIFEST
 * TODO Implement version extraction for GIT
@@ -21,11 +22,12 @@
    * [X] full packaging version (rpm)
    * [X] timestamp
 ** TODO Add validation if expected maven-artifact-version doesn't match project.version (configurable for failure or warning)
-** TODO Make "walk first parent" logic configurable (cover both cases with tests)
-** TODO Improve "first parent" impl to ensure it's fast on big repos
-** TODO Complete test scenarios for corner cases
+** TODO Implement "walk first parent" ourself, not relying on git-describe
+*** How about using JGit (see http://jgit.info/) ?
+    Looks like "--first-parent" is not baked into jgit. We'd need to do some low-level work.
+** TODO Make "describe" logic configurable: use ours vs. call git-describe (cover both cases with tests)
 ** TODO Make pattern of tstamp-version configurable
-** SOMEDAY how about using JGit ?
+** TODO Complete test scenarios
 * Propose a defmojo macro for clojure-maven project?
 ** DONE Implement
 (defmojo
@@ -45,7 +47,7 @@
        (.info log (str "* Infering project version *" output-directory))
        (.info log (str "* project.version = " (.getVersion project)))))
 ** DONE Move to clojure-maven and send pull-request upstream
-** WAITING Improvements to have it accepted (like, better validations)
+** DONE Improvements to have it accepted (like, better validations)
    * [X] Use vary-meta
    * [X] Write function keywords->JavaAnnotations, instead of hardcoded map
    * [X] Assume body is the body of the execute function

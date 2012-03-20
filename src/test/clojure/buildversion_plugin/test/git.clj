@@ -8,9 +8,9 @@
 
 ;; These vars are def'd in the pom.xml when tests are run by mvn's zi plugin.
 ;; I def some default values here for interactive development:
-(def maven-target-dir "/tmp")
-(def maven-bash-source-dir (.getCanonicalPath (java.io.File.
-                                               "./src/test/bash")))
+;; (def maven-target-dir "/tmp")
+;; (def maven-bash-source-dir (.getCanonicalPath (java.io.File.
+;;                                               "./src/test/bash")))
 ;; (println (str "*** maven-target-dir: " maven-target-dir))
 ;; (println (str "*** maven-bash-source-dir: " maven-bash-source-dir))
 
