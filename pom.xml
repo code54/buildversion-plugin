@@ -1,178 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.code54.mojo</groupId>
-  <artifactId>buildversion-plugin</artifactId>
+  <groupId>buildversion-maven-plugin</groupId>
+  <artifactId>buildversion-maven-plugin</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <packaging>maven-plugin</packaging>
-
-  <name>buildversion-plugin</name>
-  <description>Maven plugin to extract versioning information from the source
-  repository and make it available as properties in the maven project</description>
-
-
-  <properties>
-    <clojureMaven.version>0.3.2-SNAPSHOT</clojureMaven.version>
-    <maven.version>3.0.3</maven.version>
-  </properties>
-
+  <name>buildversion-maven-plugin</name>
+  <scm>
+    <tag>0354b1d5c98cc4fca73bb84676b4ea0321ac7133</tag>
+  </scm>
   <build>
     <sourceDirectory>src/main/clojure</sourceDirectory>
+    <testSourceDirectory>src/test/clojure</testSourceDirectory>
     <resources>
       <resource>
-        <directory>src/main/clojure</directory>
-        <includes>
-          <include>**/*.clj</include>
-        </includes>
+        <directory>src/main/resource</directory>
       </resource>
     </resources>
-
-    <plugins>
-      <plugin>
-        <!-- extract mojo properties from source -->
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>2.6</version>
-        <executions>
-          <execution>
-            <id>default-descriptor</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <!-- add the Clojure-specific extractor to generate the mojo descriptor -->
-            <groupId>org.cloudhoist</groupId>
-            <artifactId>clojure-maven-mojo-descriptor-extractor</artifactId>
-            <version>${clojureMaven.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-
-
-      <plugin>
-        <artifactId>maven-invoker-plugin</artifactId>
-        <version>1.5</version>
-        <configuration>
-          <projectsDirectory>src/it</projectsDirectory>
-          <cloneProjectsTo>${project.build.directory}/it/</cloneProjectsTo>
-          <pomIncludes>
-            <pomInclude>*/pom.xml</pomInclude>
-          </pomIncludes>
-          <settingsFile>src/it/settings.xml</settingsFile>
-          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-          <preBuildHookScript>setup.groovy</preBuildHookScript>
-          <postBuildHookScript>verify.groovy</postBuildHookScript>
-          <debug>false</debug>
-          <properties>
-            <!-- <clojure.version>${clojure.version}</clojure.version> -->
-          </properties>
-        </configuration>
-        <executions>
-          <execution>
-            <id>integration-test</id>
-            <goals>
-              <goal>install</goal>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Run tests in Clojure -->
-      <plugin>
-        <groupId>org.cloudhoist.plugin</groupId>
-        <artifactId>zi</artifactId>
-        <version>0.4.5</version>
-        <executions>
-          <execution>
-            <id>test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <initScript>
-            (require 'clojure.string)
-
-            (def maven-target-dir "${project.build.directory}")
-            (def maven-script-source-dir "${project.build.scriptSourceDirectory}")
-            (def maven-bash-source-dir
-            (clojure.string/replace "${project.build.testSourceDirectory}" #"/java$" "/bash"))) )
-          </initScript>
-        </configuration>
-
-      </plugin>
-
-    </plugins>
-
+    <testResources>
+      <testResource>
+        <directory>test-resources</directory>
+      </testResource>
+    </testResources>
   </build>
-
-
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>clojars</id>
+      <url>http://clojars.org/repo/</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
       <version>1.3.0</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.cloudhoist</groupId>
+      <artifactId>clojure-maven-mojo-annotations</artifactId>
+      <version>0.3.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cloudhoist</groupId>
+      <artifactId>clojure-maven-mojo</artifactId>
+      <version>0.3.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>3.0.3</version>
+    </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>tools.trace</artifactId>
       <version>0.7.1</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.cloudhoist</groupId>
-      <artifactId>clojure-maven-mojo</artifactId>
-      <version>${clojureMaven.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.cloudhoist</groupId>
-      <artifactId>clojure-maven-mojo-annotations</artifactId>
-      <version>${clojureMaven.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.cloudhoist</groupId>
-      <artifactId>clojure-maven-plexus-component-factory</artifactId>
-      <version>${clojureMaven.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-      <version>${maven.version}</version>
+      <groupId>conch</groupId>
+      <artifactId>conch</artifactId>
+      <version>0.2.1</version>
     </dependency>
   </dependencies>
-
-
-
-  <repositories>
-
-    <repository>
-      <id>sonatype-snapshots</id>
-      <url>http://oss.sonatype.org/content/repositories/releases</url>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>clojars.org</id>
-      <url>http://clojars.org/repo</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>sonatype-snapshots</id>
-      <url>http://oss.sonatype.org/content/repositories/releases</url>
-    </pluginRepository>
-  </pluginRepositories>
-
-
 </project>
+
+<!-- This file was autogenerated by Leiningen.
+  Please do not edit it directly; instead edit project.clj and regenerate it.
+  It should not be considered canonical data. For more information see
+  https://github.com/technomancy/leiningen -->

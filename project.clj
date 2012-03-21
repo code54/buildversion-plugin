@@ -3,7 +3,8 @@
                  [org.cloudhoist/clojure-maven-mojo-annotations "0.3.2-SNAPSHOT"]
                  [org.cloudhoist/clojure-maven-mojo "0.3.2-SNAPSHOT"]
                  [org.apache.maven/maven-plugin-api "3.0.3"]
-                 [org.clojure/tools.trace "0.7.1"]]
+                 [org.clojure/tools.trace "0.7.1"]
+                 [conch "0.2.1"]]
 
   :source-path "src/main/clojure"
   :compile-path "target/classes"

@@ -10,16 +10,15 @@
             [buildversion-plugin.git :as git]))
 
 
-(defmojo MyClojureMojo
+(defmojo BuildVersionMojo
   
   {:goal "simple"
    :requires-dependency-resolution "test"
    :phase "validate" }
 
   ;; Mojo parameters
-  [
-   base-dir   {:expression "${basedir}" :required true :readonly true}
-   project          {:expression "${project}" :required true :readonly true}
+  [base-dir   {:expression "${basedir}" :required true :readonly true}
+   project    {:expression "${project}" :required true :readonly true}
    output-dir {:defaultValue "${project.build.outputDirectory}" :required true}]
 
   (do 
@@ -29,11 +28,9 @@
     (let [versions-map (git/infer-project-version ".")
           props (.getProperties project)]
       
-      (doall (map (fn [[ k v]] (.put props (name k) v)) versions-map))
+      (doall (map
+              (fn [[ k v]] (.put props (name k) v))
+              versions-map))
 
-                                        ; inject project version
-      (.setVersion project (:maven-artifact-version versions-map))
-      (log/info (str "* Java class for 'project': " (class project)))
-      (log/info (str "* output-directory *" output-dir))
-      (log/info (str "* project.version = " (.getVersion project)))
-      )))
+      ;; inject project version (not working :-( )
+      (.setVersion project (:maven-artifact-version versions-map)))))

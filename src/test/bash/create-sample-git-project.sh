@@ -113,7 +113,7 @@ git tag -a -m "v1.2.0-SNAPSHOT" "v1.2.0-SNAPSHOT"
 git co master
 sleep .1
 git merge --no-ff release
-git tag -a -m "v1.2.0" "v1.2.0"
+git tag -a -m "v1.1.0" "v1.1.0"
 
 
 sleep .1

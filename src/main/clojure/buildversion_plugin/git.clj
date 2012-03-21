@@ -1,14 +1,24 @@
 (ns buildversion-plugin.git
   "GIT implementation to infer current project version"
   (:import java.util.Date java.text.SimpleDateFormat)
-  (:use clojure.java.shell
-        ; [clojure.tools.trace :only [dotrace deftrace]]
-        [clojure.string :only [trim-newline replace-first]] ))
+  (:use
+   [clojure.java.io :only [reader]]
+   [clojure.string :only [trim-newline replace-first split]] )
+  ;; [clojure.tools.trace :only [dotrace deftrace]]
+
+  (:require
+   [clojure.java.shell :as shell]
+   [conch.core :as sh] ))
 
 (defn run-git
   ([args] (run-git "." args))
   ([project-dir args] 
-     (sh "bash" "-c" (str "cd " project-dir "; git " args))))
+     (shell/sh "bash" "-c" (str "cd " project-dir "; git " args))))
+
+(defn run-git2
+  ([args] (run-git2 "." args))
+  ([project-dir args] 
+     (sh/proc "bash" "-c" (str "cd " project-dir "; git " args))))
 
 
 
@@ -29,15 +39,23 @@ See:
   (let [log-line
         (:out (run-git dir "log --oneline --decorate=short --first-parent | grep 'tag: v' | head -n1"))]
 
-    ;; expected output to parse:
-    ;;   v1.2.0-SNAPSHOT-8-ge34733d
-    ;;   v1.2.0-SNAPSHOT-0-xxxxxxxx
-    ;;   v1.2.0-RC-SNAPSHOT-0-xxxxxx
-    ;;   v1.2.0-RC-SNAPSHOT-5-a3b4c533
-    ;;   v1.2.0-3-a3b4c533
-    ;;   v1.2.0-0-xxxxxxxx
     (second (re-find #".*tag: (v\d+\.\d+\.\d+[-_\d\w]*)[\)\,].*" log-line))))
-    
+
+
+(defn git-describe-first-parent [dir]
+  "Return map with :git-tag (most recent tag on current branch (always following \"first-parent\" on merges))
+and :git-tag-delta (number of commits -couting on first-parent paths only- from :git-tag to HEAD) "
+  (let [p (run-git2 dir "log --oneline --decorate=short --first-parent")]
+
+    (loop [x 0, lines (line-seq (reader (:out p))) ]
+      (let [[_ hash tag] (re-find #"^(\w+) .*tag: ([^\)\,]+).*" (first lines))]
+        (if (and (not tag) (next lines))
+          (recur (inc x) (next lines))
+          (do
+            (sh/destroy p)
+            {:git-tag tag, :git-tag-delta x}))))))
+
+
 (defn infer-project-version [dir]
   "Infer the current project version from tags on the source-control system"
 
@@ -46,27 +64,31 @@ See:
                              (Long/parseLong)
                              (* 1000)
                              Date.)
+
         commit-tstamp-str (. (SimpleDateFormat. "yyyyMMddHHmmss") format commit-tstamp)
+
+        [short-hash long-hash] (split
+                                (:out (run-git dir "log -n 1 --format='%h %H'"))
+                                #" " )
+
         versioning-properties {:maven-artifact-version "N/A"
                                :descriptive-version "N/A"
                                :packaging-version "0"
                                :tstamp-version commit-tstamp-str
-                               :commit-version "hash-here"}
-        
-        ;; call git-describe forcing it to match the latest tag we found
-        git-tag (find-latest-tag-on-branch dir)]
+                               :commit-version long-hash
+                               :short-commit-version short-hash }
+                                                                                                                                                                     
+        {:keys [git-tag git-tag-delta] } (git-describe-first-parent dir)]
 
     (if (nil? git-tag)
       versioning-properties
       
-      (let [git-described (:out (run-git dir (str "describe --tags --match " git-tag)))
-            git-described-long ((run-git dir (str "describe --tags --long --match " git-tag)) :out)
-            maven-artifact-version ((re-find #"v(.*)" git-tag) 1)
-            after-tag (replace-first git-described-long git-tag "")
-            [_, commits-ahead, commit-hash] (re-find #"-(\d+)-([\d\w]+)" after-tag)]
+      (let [maven-artifact-version ((re-find #"v(.*)" git-tag) 1)
+            git-described (:out (run-git dir (str "describe --tags --long --match " git-tag)))
+            ]
 
         (merge versioning-properties
                {:maven-artifact-version maven-artifact-version
-                :descriptive-version (replace-first git-described #"^v" "")
-                :packaging-version commits-ahead })))))
+                :descriptive-version (str (replace-first git-tag #"^v" "") "-" git-tag-delta)
+                :packaging-version (str git-tag-delta) })))))
 
