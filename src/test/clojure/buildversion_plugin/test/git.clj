@@ -1,15 +1,15 @@
 (ns buildversion-plugin.test.git
-  (:use [buildversion-plugin.git :only [run-git infer-project-version] :as git]
-        clojure.test
-        clojure.java.shell
-        [clojure.java.io :only [file]]
+  (:use [clojure.java.io :only [file]]
+        [clojure.string :only [trim-newline blank?] ]
         clojure.tools.trace
-        [clojure.string :only [trim-newline blank?] ] ))
+        clojure.test)
+  (:require [conch.core :as sh]
+            [buildversion-plugin.git :only [run-git infer-project-version] :as git]))
 
 ;; These vars are def'd in the pom.xml when tests are run by mvn's zi plugin.
 ;; I def some default values here for interactive development:
-(def maven-target-dir "/tmp")
-(def maven-bash-source-dir (.getCanonicalPath (java.io.File.
+;; (def maven-target-dir "/tmp")
+;; (def maven-bash-source-dir (.getCanonicalPath (java.io.File.
                                               "./src/test/bash")))
 ;; (println (str "*** maven-target-dir: " maven-target-dir))
 ;; (println (str "*** maven-bash-source-dir: " maven-bash-source-dir))
@@ -25,8 +25,8 @@
   (if (.isDirectory (file (str sample-project-dir "/.git")))
     (println "Example GIT project dir found... re-using it")
     
-    (let [script (sh (str maven-bash-source-dir "/create-sample-git-project.sh") sample-project-dir)
-          exit-OK (zero? (script :exit)) ]
+    (let [script (sh/proc (str maven-bash-source-dir "/create-sample-git-project.sh") sample-project-dir)
+          exit-OK (zero? (sh/exit-code script)) ]
       
       (println "Building example GIT project for testing...")
       (println (script :out))
@@ -45,14 +45,15 @@
 ;;
 (deftest test-run-git
   (is (re-seq #"git version [\d\.]+"
-              (:out (git/run-git sample-project-dir "--version")))))
+              (git/run-git-wait sample-project-dir "--version"))))
 
 
-(defn- expect-tag-given-logline [log-line, tag]
-  (with-redefs [git/run-git (fn [ _ _] {:out log-line} )] ; "mock" call to git log
-     (is (= (git/find-latest-tag-on-branch ".") tag))))
+(comment
+  (defn- expect-tag-given-logline [log-line, tag]
+    (with-redefs [git/run-git-wait (fn [ _ _] log-line )] ; "mock" call to git log
+      (is (= (git/find-latest-tag-on-branch ".") tag))))
 
-(deftest test-find-latest-tag-on-branch
+  (deftest test-find-latest-tag-on-branch
     ;;   v1.2.0-SNAPSHOT-8-ge34733d
     ;;   v1.2.0-SNAPSHOT-0-xxxxxxxx
     ;;   v1.2.0-RC-SNAPSHOT-0-xxxxxx
@@ -60,16 +61,16 @@
     ;;   v1.2.0-3-a3b4c533
     ;;   v1.2.0-0-xxxxxxxx
 
-  (expect-tag-given-logline "aa44944 (HEAD, tag: v9.9.9, origin/master, master) ..." "v9.9.9")
-  (expect-tag-given-logline "c3bc9ff (tag: v1.11.0) TMS: Add..."                     "v1.11.0")
-  (expect-tag-given-logline "c3bc9fx (tag: v1.10.0-dev) Blah blah..."                "v1.10.0-dev"))
+    (expect-tag-given-logline "aa44944 (HEAD, tag: v9.9.9, origin/master, master) ..." "v9.9.9")
+    (expect-tag-given-logline "c3bc9ff (tag: v1.11.0) TMS: Add..."                     "v1.11.0")
+    (expect-tag-given-logline "c3bc9fx (tag: v1.10.0-dev) Blah blah..."                "v1.10.0-dev")))
 
 
 
 (defn get-commit-hash-by-description [descr]
   "Given a git commit description, it returns the hash of a commit matching that description"
-  (let [git (git/run-git sample-project-dir (str "log --all --format=format:%H --grep='^" descr "$'"))
-        commit-hash (:out git)]
+  (let [git (git/run-git-wait sample-project-dir (str "log --all --format=format:%H --grep='^" descr "$'"))
+        commit-hash git]
     (is (not (blank? commit-hash)) (str "Couldn't find hash for commit descr" descr))
     commit-hash))
 
@@ -78,7 +79,7 @@
 
   (let [commit-hash (get-commit-hash-by-description commit-descr)
         checkout (git/run-git sample-project-dir (str "checkout " commit-hash))
-        checkout-OK (zero? (checkout :exit))
+        checkout-OK (zero? (sh/exit-code checkout))
         actual-versions (git/infer-project-version sample-project-dir)]
 
     (is checkout-OK (str "Checkout failure " (checkout :err) ))
@@ -134,15 +135,15 @@
   ;;        )
 
   
-  (git/run-git sample-project-dir "checkout develop")
+  (git/run-git-wait sample-project-dir "checkout develop")
   (is (= (git/git-describe-first-parent sample-project-dir)
          {:git-tag "v1.2.0-SNAPSHOT" :git-tag-delta 2}))
 
-  (git/run-git sample-project-dir "checkout v1.2.0-SNAPSHOT")
+  (git/run-git-wait sample-project-dir "checkout v1.2.0-SNAPSHOT")
   (is (= (git/git-describe-first-parent sample-project-dir)
          {:git-tag "v1.2.0-SNAPSHOT" :git-tag-delta 0}))
 
-  (git/run-git sample-project-dir "checkout master")
+  (git/run-git-wait sample-project-dir "checkout master")
   (is (= (git/git-describe-first-parent sample-project-dir)
          {:git-tag "v1.1.1" :git-tag-delta 0})))
 
