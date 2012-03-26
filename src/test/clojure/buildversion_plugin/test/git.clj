@@ -9,8 +9,7 @@
 ;; These vars are def'd in the pom.xml when tests are run by mvn's zi plugin.
 ;; I def some default values here for interactive development:
 ;; (def maven-target-dir "/tmp")
-;; (def maven-bash-source-dir (.getCanonicalPath (java.io.File.
-                                              "./src/test/bash")))
+;; (def maven-bash-source-dir (.getCanonicalPath (java.io.File. "./src/test/bash")))
 ;; (println (str "*** maven-target-dir: " maven-target-dir))
 ;; (println (str "*** maven-bash-source-dir: " maven-bash-source-dir))
 
@@ -48,22 +47,7 @@
               (git/run-git-wait sample-project-dir "--version"))))
 
 
-(comment
-  (defn- expect-tag-given-logline [log-line, tag]
-    (with-redefs [git/run-git-wait (fn [ _ _] log-line )] ; "mock" call to git log
-      (is (= (git/find-latest-tag-on-branch ".") tag))))
 
-  (deftest test-find-latest-tag-on-branch
-    ;;   v1.2.0-SNAPSHOT-8-ge34733d
-    ;;   v1.2.0-SNAPSHOT-0-xxxxxxxx
-    ;;   v1.2.0-RC-SNAPSHOT-0-xxxxxx
-    ;;   v1.2.0-RC-SNAPSHOT-5-a3b4c533
-    ;;   v1.2.0-3-a3b4c533
-    ;;   v1.2.0-0-xxxxxxxx
-
-    (expect-tag-given-logline "aa44944 (HEAD, tag: v9.9.9, origin/master, master) ..." "v9.9.9")
-    (expect-tag-given-logline "c3bc9ff (tag: v1.11.0) TMS: Add..."                     "v1.11.0")
-    (expect-tag-given-logline "c3bc9fx (tag: v1.10.0-dev) Blah blah..."                "v1.10.0-dev")))
 
 
 
