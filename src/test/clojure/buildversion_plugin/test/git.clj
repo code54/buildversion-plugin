@@ -118,7 +118,8 @@
 
   ;;        )
 
-  
+
+  ;; test against actual GIT repo
   (git/run-git-wait sample-project-dir "checkout develop")
   (is (= (git/git-describe-first-parent sample-project-dir)
          {:git-tag "v1.2.0-SNAPSHOT" :git-tag-delta 2}))
@@ -129,7 +130,25 @@
 
   (git/run-git-wait sample-project-dir "checkout master")
   (is (= (git/git-describe-first-parent sample-project-dir)
-         {:git-tag "v1.1.1" :git-tag-delta 0})))
+         {:git-tag "v1.1.1" :git-tag-delta 0}))
+
+
+  ;; test agains some fake "git log" output to cover more scenarios
+  (are [lines tag commit-count]
+       (= (git/git-describe-log-lines lines) [tag commit-count])
+
+       ["aa44944 (HEAD, tag: v9.9.9, origin/master, master) ..."] "v9.9.9" 0
+       ["c3bc9ff (tag: v1.11.0) TMS: Add..."] "v1.11.0" 0
+       ["c3bc9fx (tag: v1.10.0-dev) Blah blah..."] "v1.10.0-dev" 0 
+       
+       ["aabbccd Dummy commit"
+        "bbccddee Dummy commmit2"
+        "c3bc9fx (tag: v1.10.0-dev) Blah blah..."] "v1.10.0-dev" 2
+
+       ;; no tags:
+       ["aabbccd Dummy commit1"
+        "bbccdde Dummy commit2"
+        "ccddeef Dymmy commit3"] nil 2))
 
 
 (deftest test-tstamp-format-option
