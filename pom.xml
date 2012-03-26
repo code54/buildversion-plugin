@@ -101,11 +101,18 @@
           <initScript>
             (require 'clojure.string)
 
-            (def maven-target-dir "${project.build.directory}")
-            (def maven-script-source-dir "${project.build.scriptSourceDirectory}")
-            (def maven-bash-source-dir
-            (clojure.string/replace "${project.build.testSourceDirectory}" #"/java$" "/bash"))) )
+            (java.lang.System/setProperty
+                       "buildversion.maven-target-dir"
+                       "${project.build.directory}" )
+
+            (java.lang.System/setProperty
+                       "buildversion.maven-bash-source-dir"
+                       (clojure.string/replace "${project.build.testSourceDirectory}"
+                           #"/java$" "/bash") )
+
+
           </initScript>
+
         </configuration>
 
       </plugin>

@@ -6,12 +6,16 @@
   (:require [conch.core :as sh]
             :reload [buildversion-plugin.git :as git]))
 
-;; These vars are def'd in the pom.xml when tests are run by mvn's zi plugin.
-;; I def some default values here for interactive development:
-;; (def maven-target-dir "/tmp")
-;; (def maven-bash-source-dir (.getCanonicalPath (java.io.File. "./src/test/bash")))
-;; (println (str "*** maven-target-dir: " maven-target-dir))
-;; (println (str "*** maven-bash-source-dir: " maven-bash-source-dir))
+;; These system properties are set in the pom.xml by mvn's zi:test's "initScript".
+;; Some default values here for interactive development
+(def maven-target-dir (java.lang.System/getProperty
+                       "buildversion.maven-target-dir" "/tmp"))
+(def maven-bash-source-dir
+  (.getCanonicalPath (java.io.File.
+                      (java.lang.System/getProperty "buildversion.maven-bash-source-dir"
+                                                    "./src/test/bash"))))
+(println (str "buildversion tests. Using maven-target-dir: " maven-target-dir))
+(println (str "buildversion tests. Using maven-bash-source-dir: " maven-bash-source-dir))
 
 
 ;;
@@ -40,25 +44,16 @@
 
 
 ;;
-;; Tests
+;; Helper funs
 ;;
-(deftest test-run-git
-  (is (re-seq #"git version [\d\.]+"
-              (git/run-git-wait sample-project-dir "--version"))))
-
-
-
-
-
-
-(defn get-commit-hash-by-description [descr]
+(defn- get-commit-hash-by-description [descr]
   "Given a git commit description, it returns the hash of a commit matching that description"
   (let [git (git/run-git-wait sample-project-dir (str "log --all --format=format:%H --grep='^" descr "$'"))
         commit-hash git]
     (is (not (blank? commit-hash)) (str "Couldn't find hash for commit descr" descr))
     commit-hash))
 
-(defn assert-for-commit [commit-descr expected-patterns]
+(defn- assert-for-commit [commit-descr expected-patterns]
   "Checkout on a particular commit and validate inferred versions match the given regexp patterns"
 
   (let [commit-hash (get-commit-hash-by-description commit-descr)
@@ -72,6 +67,13 @@
                               (str "Testing " key " for commit '" commit-descr "'")))
                 (keys expected-patterns)))))
 
+
+;;
+;; Tests
+;;
+(deftest test-run-git
+  (is (re-seq #"git version [\d\.]+"
+              (git/run-git-wait sample-project-dir "--version"))))
 
 (deftest test-infer-project-versions
 
