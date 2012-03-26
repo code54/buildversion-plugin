@@ -1,7 +1,7 @@
 (ns buildversion-plugin.test.git
   (:use [clojure.java.io :only [file]]
         [clojure.string :only [trim-newline blank?] ]
-        clojure.tools.trace
+;        clojure.tools.trace
         clojure.test)
   (:require [conch.core :as sh]
             [buildversion-plugin.git :only [run-git infer-project-version] :as git]))

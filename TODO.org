@@ -1,17 +1,16 @@
-* DONE Build minimal and clean Mojo in Clojure
-* DONE Rename project? buildversioning? versioning-properties-plugin?
-* TODO Implement Mojo
+* Mojo
 ** DONE Call GIT version-extraction logic from Mojo
 ** DONE Test on a basic project *from a brand new user* (with a clean ~/.m2)
 ** DONE Typo on clojure-maven/pom.xml's reference to clojars repo
 ** DONE Maven Integration tests
 *** DONE Hook it with maven-invoker-plugin
 *** DONE write basic assertion (verify.sh) to validate Mojo's output
-** TODO Clean up Mojo's output on execution. Improve error handling
+** DONE Clean up Mojo's output on execution.
+** TODO Improve error handling?
 ** TODO Write example pom.xml/project (may be same as integration test?)
 *** add filtering of propeties file
 *** add field on jar MANIFEST
-* TODO Implement version extraction for GIT
+* GIT Impl
 ** DONE put together git repo as fixture
 ** DONE pick unit testing framework for clojure
 ** DONE May be we need to use zi (or clojure-maven-plugin) to be able to run tests
@@ -23,13 +22,14 @@
    * [X] full packaging version (rpm)
    * [X] timestamp
 ** TODO Add validation if expected maven-artifact-version doesn't match project.version (configurable for failure or warning)
-** TODO Implement "walk first parent" ourself, not relying on git-describe
+** DONE Implement "walk first parent" ourselves, not relying on git-describe
 *** How about using JGit (see http://jgit.info/) ?
     Looks like "--first-parent" is not baked into jgit. We'd need to do some low-level work.
 ** TODO Make "describe" logic configurable: use ours vs. call git-describe (cover both cases with tests)
 ** TODO Make pattern of tstamp-version configurable
-** TODO Complete test scenarios
-* Propose a defmojo macro for clojure-maven project?
+* TODO Generalize protocol for potential non-git implementations
+* SOMEDAY Learn more about Plexus and how Maven uses it
+* DONE Propose a defmojo macro for clojure-maven project?
 ** DONE Implement
 (defmojo
   "This is an example Maven Plugin written in Clojure"
@@ -58,8 +58,6 @@
    * [X] Add beter validations
    * [X] Write basic unit tests
    * [X] Formatting max 80 columns
-* TODO Generalize protocol for potential non-git implementations
-* SOMEDAY Learn a bit about Plexus and how Maven uses it
 * -------------------------
 :DETAILS:
 # -*- mode: org; -*-
