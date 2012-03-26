@@ -1,6 +1,6 @@
 (ns buildversion-plugin.core
   "Buildversion Maven Plugin"
-  (:use clojure.maven.mojo.defmojo :only defmojo)
+  (:use clojure.maven.mojo.defmojo)
   (:require [clojure.maven.mojo.log :as log]
             [buildversion-plugin.git :as git]))
 
@@ -11,11 +11,14 @@
    :phase "validate" }
 
   ;; Mojo parameters
-  [project  {:expression "${project}" :required true :readonly true}]
+  [project  {:expression "${project}" :required true :readonly true}
+   tstamp-format {:alias "tstampFormat" :default "yyyyMMddHHmmss"
+                  :typename "java.lang.String"} ]
 
 
   ;; Goal execution
-  (let [versions-map (git/infer-project-version ".")
+  (let [versions-map (git/infer-project-version "." {"tstamp-format" tstamp-format}
+                                                )
         props (.getProperties project)]
 
     (log/debug (str "buildnumber-plugin - Setting properties: "))

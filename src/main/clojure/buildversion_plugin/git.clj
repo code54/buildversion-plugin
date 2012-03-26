@@ -1,8 +1,7 @@
 (ns buildversion-plugin.git
   "GIT implementation to infer current project version"
   (:import java.util.Date java.text.SimpleDateFormat)
-  (:use
-   ;; [clojure.tools.trace :only [dotrace deftrace]]
+  (:use    ;; [clojure.tools.trace :only [dotrace deftrace]]
    [clojure.java.io :only [reader]]
    [clojure.string :only [trim-newline replace-first split]] )
   (:require
@@ -31,7 +30,7 @@ and :git-tag-delta (number of commits -couting on first-parent paths only- from 
             (sh/destroy p)
             {:git-tag tag, :git-tag-delta x}))))))
 
-(defn infer-project-version [dir]
+(defn infer-project-version [dir {tstamp-format "tstamp-format"}]
   "Infer the current project version from tags on the source-control system"
 
   (let [commit-tstamp (-> (run-git-wait dir "log -n 1 --format='%ct'")
@@ -39,8 +38,9 @@ and :git-tag-delta (number of commits -couting on first-parent paths only- from 
                           (Long/parseLong)
                           (* 1000)
                           Date.)
-
-        commit-tstamp-str (. (SimpleDateFormat. "yyyyMMddHHmmss") format commit-tstamp)
+        format-str (or tstamp-format "yyyyMMddHHmmss")
+        commit-tstamp-str (.format (SimpleDateFormat. format-str)
+                                   commit-tstamp)
 
         [short-hash long-hash] (split
                                 (run-git-wait dir "log -n 1 --format='%h %H'")

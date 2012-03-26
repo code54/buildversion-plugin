@@ -4,7 +4,7 @@
 ;        clojure.tools.trace
         clojure.test)
   (:require [conch.core :as sh]
-            [buildversion-plugin.git :only [run-git infer-project-version] :as git]))
+            :reload [buildversion-plugin.git :as git]))
 
 ;; These vars are def'd in the pom.xml when tests are run by mvn's zi plugin.
 ;; I def some default values here for interactive development:
@@ -64,7 +64,7 @@
   (let [commit-hash (get-commit-hash-by-description commit-descr)
         checkout (git/run-git sample-project-dir (str "checkout " commit-hash))
         checkout-OK (zero? (sh/exit-code checkout))
-        actual-versions (git/infer-project-version sample-project-dir)]
+        actual-versions (git/infer-project-version sample-project-dir {})]
 
     (is checkout-OK (str "Checkout failure " (checkout :err) ))
 
@@ -130,4 +130,12 @@
   (git/run-git-wait sample-project-dir "checkout master")
   (is (= (git/git-describe-first-parent sample-project-dir)
          {:git-tag "v1.1.1" :git-tag-delta 0})))
+
+
+(deftest test-tstamp-format-option
+  (let [actual-versions (git/infer-project-version sample-project-dir
+                                                   { "tstamp-format" "SSS"})]
+    (println actual-versions)
+    (is (re-find #"000" (:tstamp-version actual-versions))
+        "Always expecting 000 milliseconds. Git precision is up to seconds")))
 
