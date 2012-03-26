@@ -21,7 +21,7 @@ println p.text
 
 
 println "*** Checking out 'develop' branch"
-p = "git --git-dir=target/it/simple-project/.git checkout -f develop".execute()
+p = "git --git-dir=target/it/simple-project/.git --work-tree=target/it/simple-project/ checkout -f develop".execute()
 println p.text
 p.waitFor()
 
