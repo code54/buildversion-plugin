@@ -17,14 +17,16 @@
 
 
   ;; Goal execution
-  (let [versions-map (git/infer-project-version "." {"tstamp-format" tstamp-format}
-                                                )
+  (let [versions-map (git/infer-project-version "." {"tstamp-format" tstamp-format})
         props (.getProperties project)]
 
     (log/debug (str "buildnumber-plugin - Setting properties: "))
     (doseq [[prop value] versions-map]
       (log/debug (str (name prop) "=" value))
       (.put props (name prop) value))))
+
+
+
 
     ;; injecting project version does not working well :-(
     ;; (.setVersion project (:maven-artifact-version versions-map))

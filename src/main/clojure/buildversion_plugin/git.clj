@@ -53,23 +53,20 @@ and :git-tag-delta (number of commits -couting on first-parent paths only- from 
                                 (run-git-wait dir "log -n 1 --format='%h %H'")
                                 #" " )
 
-        versioning-properties {:maven-artifact-version "N/A"
-                               :descriptive-version "N/A"
-                               :packaging-version "0"
-                               :tstamp-version commit-tstamp-str
-                               :commit-version long-hash
-                               :short-commit-version short-hash }
+        versioning-properties {:build-tag "N/A"
+                               :build-version "N/A"
+                               :build-tag-delta "0"
+                               :build-tstamp commit-tstamp-str
+                               :build-commit long-hash
+                               :build-commit-abbrev short-hash }
                                                                                                                                                                      
         {:keys [git-tag git-tag-delta] } (git-describe-first-parent dir)]
 
     (if (nil? git-tag)
       versioning-properties
       
-      (let [maven-artifact-version ((re-find #"v(.*)" git-tag) 1)
-            git-described  (run-git-wait dir (str "describe --tags --long --match " git-tag))
-            ]
-
+      (let [maven-artifact-version ((re-find #"v(.*)" git-tag) 1)]
         (merge versioning-properties
-               {:maven-artifact-version maven-artifact-version
-                :descriptive-version (str (replace-first git-tag #"^v" "") "-" git-tag-delta)
-                :packaging-version (str git-tag-delta) })))))
+               {:build-tag maven-artifact-version
+                :build-version (str (replace-first git-tag #"^v" "") "-" git-tag-delta)
+                :build-tag-delta (str git-tag-delta) })))))

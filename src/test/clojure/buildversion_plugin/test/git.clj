@@ -42,7 +42,6 @@
 
 (use-fixtures :once sample-git-project-fixture)
 
-
 ;;
 ;; Helper funs
 ;;
@@ -78,74 +77,64 @@
 (deftest test-infer-project-versions
 
   (assert-for-commit "First tagged commit"
-                     {:descriptive-version    #"^1.0.0-SNAPSHOT-0.*"
-                      :maven-artifact-version #"^1.0.0-SNAPSHOT$"
-                      :packaging-version      #"0"
-                      :tstamp-version         #"\d+"
-                      :commit-version         #"[a-f\d]+"
+                     {:build-version    #"^1.0.0-SNAPSHOT-0.*"
+                      :build-tag #"^1.0.0-SNAPSHOT$"
+                      :build-tag-delta      #"0"
+                      :build-tstamp         #"\d+"
+                      :build-commit         #"[a-f\d]+"
                       })
 
   (assert-for-commit "dev commit 5"
-                     {:descriptive-version      #"1.1.0-SNAPSHOT-3"
-                      :maven-artifact-version   #"^1.1.0-SNAPSHOT$"
-                      :packaging-version        #"3"
-                      :tstamp-version           #"\d+"
-                      :commit-version           #"[a-f\d]+"
+                     {:build-version      #"1.1.0-SNAPSHOT-3"
+                      :build-tag   #"^1.1.0-SNAPSHOT$"
+                      :build-tag-delta        #"3"
+                      :build-tstamp           #"\d+"
+                      :build-commit           #"[a-f\d]+"
                       })
 
   (assert-for-commit "dev commit 1"
-                     {:descriptive-version      #"^1.0.0-SNAPSHOT-1.*"
-                      :maven-artifact-version   #"^1.0.0-SNAPSHOT"
-                      :packaging-version        #"1"
-                      :tstamp-version           #"\d+"
-                      :commit-version           #"[a-f\d]+"
+                     {:build-version      #"^1.0.0-SNAPSHOT-1.*"
+                      :build-tag   #"^1.0.0-SNAPSHOT"
+                      :build-tag-delta        #"1"
+                      :build-tstamp           #"\d+"
+                      :build-commit           #"[a-f\d]+"
                       })
 
   ;; No tag is reacheable from this commit:
   (assert-for-commit "Initial commit. Before any tag"
-                     {:descriptive-version      #"N/A"
-                      :maven-artifact-version   #"N/A"
-                      :packaging-version        #"0"
-                      :tstamp-version           #"\d+"
-                      :commit-version           #"[a-f\d]+"
+                     {:build-version      #"N/A"
+                      :build-tag   #"N/A"
+                      :build-tag-delta        #"0"
+                      :build-tstamp           #"\d+"
+                      :build-commit           #"[a-f\d]+"
                       }))
 
 
 (deftest test-git-describe-first-parent
 
-  ;; (letfn [assert[commitish, expected-tag, expected-delta]
-  ;;         (git/run-git sample-project-dir (str "checkout " commitish))
-  ;;         (is (= (git/git-describe-first-parent sample-project-dir)
-  ;;                {:git-tag expected-tag :git-tag-delta expected-delta}))]
+  ;; test against actual (sample) GIT repo
+  ;; (see sample-git-project-fixture above)
+  (are [commitish expected-tag expected-delta]
+       (do
+         (git/run-git-wait sample-project-dir (str "checkout " commitish))
+         (= (git/git-describe-first-parent sample-project-dir)
+            {:git-tag expected-tag  :git-tag-delta expected-delta}))
 
-  ;;        )
-
-
-  ;; test against actual GIT repo
-  (git/run-git-wait sample-project-dir "checkout develop")
-  (is (= (git/git-describe-first-parent sample-project-dir)
-         {:git-tag "v1.2.0-SNAPSHOT" :git-tag-delta 2}))
-
-  (git/run-git-wait sample-project-dir "checkout v1.2.0-SNAPSHOT")
-  (is (= (git/git-describe-first-parent sample-project-dir)
-         {:git-tag "v1.2.0-SNAPSHOT" :git-tag-delta 0}))
-
-  (git/run-git-wait sample-project-dir "checkout master")
-  (is (= (git/git-describe-first-parent sample-project-dir)
-         {:git-tag "v1.1.1" :git-tag-delta 0}))
-
+       "develop" "v1.2.0-SNAPSHOT" 2
+       "v1.2.0-SNAPSHOT" "v1.2.0-SNAPSHOT" 0
+       "master" "v1.1.1" 0 )
 
   ;; test agains some fake "git log" output to cover more scenarios
   (are [lines tag commit-count]
        (= (git/git-describe-log-lines lines) [tag commit-count])
 
-       ["aa44944 (HEAD, tag: v9.9.9, origin/master, master) ..."] "v9.9.9" 0
-       ["c3bc9ff (tag: v1.11.0) TMS: Add..."] "v1.11.0" 0
-       ["c3bc9fx (tag: v1.10.0-dev) Blah blah..."] "v1.10.0-dev" 0 
-       
+       ["aa44944 (HEAD, tag: v9.9.9, origin/master, master) ..."] "v9.9.9"      0
+       ["c3bc9ff (tag: v1.11.0) TMS: Add..."                    ] "v1.11.0"     0
+       ["c3bc9fx (tag: v1.10.0-dev) Blah blah..."               ] "v1.10.0-dev" 0 
+
        ["aabbccd Dummy commit"
         "bbccddee Dummy commmit2"
-        "c3bc9fx (tag: v1.10.0-dev) Blah blah..."] "v1.10.0-dev" 2
+        "c3bc9fx (tag: v1.10.0-dev) Blah blah..."               ] "v1.10.0-dev" 2
 
        ;; no tags:
        ["aabbccd Dummy commit1"
@@ -157,6 +146,6 @@
   (let [actual-versions (git/infer-project-version sample-project-dir
                                                    { "tstamp-format" "SSS"})]
     (println actual-versions)
-    (is (re-find #"000" (:tstamp-version actual-versions))
+    (is (re-find #"000" (:build-tstamp actual-versions))
         "Always expecting 000 milliseconds. Git precision is up to seconds")))
 

@@ -6,7 +6,7 @@
 *** DONE Hook it with maven-invoker-plugin
 *** DONE write basic assertion (verify.sh) to validate Mojo's output
 ** DONE Clean up Mojo's output on execution.
-** TODO Improve error handling?
+** SOMEDAY Improve error handling? (need more test cases?)
 ** TODO Write example pom.xml/project (may be same as integration test?)
 *** add filtering of propeties file
 *** add field on jar MANIFEST
@@ -21,7 +21,7 @@
    * [X] full label (human)
    * [X] full packaging version (rpm)
    * [X] timestamp
-** TODO Add validation if expected maven-artifact-version doesn't match project.version (configurable for failure or warning)
+** TODO Add validation if expected build-tag doesn't match project.version (configurable for failure or warning)
 ** DONE Implement "walk first parent" ourselves, not relying on git-describe
 *** How about using JGit (see http://jgit.info/) ?
     Looks like "--first-parent" is not baked into jgit. We'd need to do some low-level work.
@@ -29,8 +29,9 @@
 ** DONE Make pattern of tstamp-version configurable
 *** TODO add to integration test (<configuration><tstampFormat>yyyy</tstampFormat></configuration>)
 * TODO Generalize protocol for potential non-git implementations
+** see https://github.com/Raynes/bultitude
 * SOMEDAY Learn more about Plexus and how Maven uses it
-* DONE Propose a defmojo macro for clojure-maven project?
+* TODO Propose a defmojo macro for clojure-maven project?
 ** DONE Implement
 (defmojo
   "This is an example Maven Plugin written in Clojure"
@@ -59,6 +60,20 @@
    * [X] Add beter validations
    * [X] Write basic unit tests
    * [X] Formatting max 80 columns
+** WAITING Propose changes to allow for Plexus Components in addition to parameters
+   (defmojo Mojure
+      "This is a Mojo in Clojure"
+      {:goal "simple" :phase "validate"}
+     
+      [:parameters
+       base-directory   {:expression "${basedir}" :required true :readonly true}
+       project          {:expression "${project}" :required true :readonly true}]
+     
+      [:components
+       base-directory   {:role "xxx.yyy.Zzzz}"]
+     
+      (log/info (str "Hello World!")))
+       
 * -------------------------
 :DETAILS:
 # -*- mode: org; -*-

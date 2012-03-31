@@ -42,10 +42,12 @@
 		                </goals>
 		                <configuration>
 		                    <tasks>
-		                        <echo message="descriptive-version: ${descriptive-version}" />
-		                        <echo message="maven-artifact-version: ${maven-artifact-version}" />
-		                        <echo message="packaging-version: ${packaging-version}" />
-		                        <echo message="tstamp-version: ${tstamp-version}" />
+		                        <echo message="build-version: ${build-version}" />
+		                        <echo message="build-tag: ${build-tag}" />
+		                        <echo message="build-tag-delta: ${build-tag-delta}" />
+		                        <echo message="build-tstamp: ${build-tstamp}" />
+		                        <echo message="build-commit: ${build-commit}" />
+		                        <echo message="build-commit-abbrev: ${build-commit-abbrev}" />
 		                    </tasks>
 		                </configuration>
 		            </execution>
