@@ -96,6 +96,16 @@
               <goal>test</goal>
             </goals>
           </execution>
+
+          <execution>
+            <id>default-compile</id>
+            <phase>compile</phase>
+
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+
         </executions>
         <configuration>
           <initScript>
@@ -116,6 +126,11 @@
         </configuration>
 
       </plugin>
+
+
+
+
+
 
     </plugins>
 
@@ -169,6 +184,8 @@
 
 
 
+
+
   <repositories>
 
     <repository>
@@ -187,6 +204,5 @@
       <url>http://oss.sonatype.org/content/repositories/releases</url>
     </pluginRepository>
   </pluginRepositories>
-
 
 </project>
