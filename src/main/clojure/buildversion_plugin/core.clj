@@ -6,9 +6,7 @@
 
 (defmojo BuildVersionMojo
   
-  {:goal "simple"
-   :requires-dependency-resolution "test"
-   :phase "validate" }
+  {:goal "set-properties" :phase "initialize" }
 
   ;; Mojo parameters
   [project  {:expression "${project}" :required true :readonly true}

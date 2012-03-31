@@ -15,20 +15,16 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.code54.mojo</groupId>
-                <artifactId>buildversion-plugin</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>simple</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-            </plugin>
+          <plugin>
+            <groupId>com.code54.mojo</groupId>
+            <artifactId>buildversion-plugin</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <executions>
+              <execution>
+                <goals><goal>set-properties</goal></goals>
+              </execution>
+            </executions>
+          </plugin>
 
 		    <plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
