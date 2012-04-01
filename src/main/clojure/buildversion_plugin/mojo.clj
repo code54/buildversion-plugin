@@ -1,4 +1,4 @@
-(ns buildversion-plugin.core
+(ns buildversion-plugin.mojo
   "Buildversion Maven Plugin"
   (:use clojure.maven.mojo.defmojo)
   (:require [clojure.maven.mojo.log :as log]
