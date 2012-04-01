@@ -14,8 +14,9 @@
 
 
   <properties>
-    <clojureMaven.version>0.3.2-SNAPSHOT</clojureMaven.version>
-    <maven.version>3.0.3</maven.version>
+    <!-- <clojureMaven.version>0.3.2-SNAPSHOT</clojureMaven.version> -->
+    <clojureMaven.version>0.3.1</clojureMaven.version>
+    <maven.version>3.0.4</maven.version>
   </properties>
 
   <build>
@@ -151,11 +152,11 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.cloudhoist</groupId>
-      <artifactId>clojure-maven-mojo</artifactId>
-      <version>${clojureMaven.version}</version>
-    </dependency>
+    <!-- <dependency> -->
+    <!--   <groupId>org.cloudhoist</groupId> -->
+    <!--   <artifactId>clojure-maven-mojo</artifactId> -->
+    <!--   <version>${clojureMaven.version}</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>org.cloudhoist</groupId>
       <artifactId>clojure-maven-mojo-annotations</artifactId>
