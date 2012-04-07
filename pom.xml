@@ -98,14 +98,14 @@
             </goals>
           </execution>
 
-          <execution>
-            <id>default-compile</id>
-            <phase>compile</phase>
+          <!-- <execution> -->
+          <!--   <id>default-compile</id> -->
+          <!--   <phase>compile</phase> -->
 
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
+          <!--   <goals> -->
+          <!--     <goal>compile</goal> -->
+          <!--   </goals> -->
+          <!-- </execution> -->
 
         </executions>
         <configuration>
