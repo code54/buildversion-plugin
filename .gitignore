@@ -7,4 +7,6 @@
 /.lein-deps-sum
 /.lein-plugins
 /target
+*iml
+/.idea
 
