@@ -68,5 +68,5 @@ and :git-tag-delta (number of commits -couting on first-parent paths only- from 
       (let [maven-artifact-version ((re-find #"v(.*)" git-tag) 1)]
         (merge versioning-properties
                {:build-tag maven-artifact-version
-                :build-version (str (replace-first git-tag #"^v" "") "-" git-tag-delta)
+                :build-version (str (replace-first git-tag #"^v" "") "-" git-tag-delta "-" short-hash)
                 :build-tag-delta (str git-tag-delta) })))))
