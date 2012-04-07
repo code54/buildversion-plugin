@@ -27,7 +27,7 @@
     Looks like "--first-parent" is not baked into jgit. We'd need to do some low-level work.
 ** TODO Make "describe" logic configurable: use ours vs. call git-describe (cover both cases with tests)
 ** DONE Make pattern of tstamp-version configurable
-*** TODO add to integration test (<configuration><tstampFormat>yyyy</tstampFormat></configuration>)
+*** DONE add to integration test
 * TODO Generalize protocol for potential non-git implementations
 ** see https://github.com/Raynes/bultitude
 * SOMEDAY Learn more about Plexus and how Maven uses it
