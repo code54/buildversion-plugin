@@ -9,8 +9,12 @@
   <packaging>maven-plugin</packaging>
 
   <name>buildversion-plugin</name>
-  <description>Maven plugin to extract versioning information from the source
-  repository and make it available as properties in the maven project</description>
+  <description>
+    This is a maven plugin that extracts current build information from git
+    projects, including: the latest commit hash, timestamp, most recent tag,
+    number of commits since most recent tag. It also implements a "follow first
+    parent" flavor of git describe.
+  </description>
 
 
   <properties>
@@ -121,18 +125,9 @@
                        (clojure.string/replace "${project.build.testSourceDirectory}"
                            #"/java$" "/bash") )
 
-
           </initScript>
-
         </configuration>
-
       </plugin>
-
-
-
-
-
-
     </plugins>
 
   </build>
@@ -157,6 +152,7 @@
     <!--   <artifactId>clojure-maven-mojo</artifactId> -->
     <!--   <version>${clojureMaven.version}</version> -->
     <!-- </dependency> -->
+
     <dependency>
       <groupId>org.cloudhoist</groupId>
       <artifactId>clojure-maven-mojo-annotations</artifactId>
@@ -180,30 +176,6 @@
       <artifactId>conch</artifactId>
       <version>0.2.1</version>
     </dependency>
-
   </dependencies>
-
-
-
-
-
-  <repositories>
-
-    <repository>
-      <id>sonatype-snapshots</id>
-      <url>http://oss.sonatype.org/content/repositories/releases</url>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>clojars.org</id>
-      <url>http://clojars.org/repo</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>sonatype-snapshots</id>
-      <url>http://oss.sonatype.org/content/repositories/releases</url>
-    </pluginRepository>
-  </pluginRepositories>
 
 </project>
