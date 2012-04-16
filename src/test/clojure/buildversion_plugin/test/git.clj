@@ -136,6 +136,14 @@
         "bbccddee Dummy commmit2"
         "c3bc9fx (tag: v1.10.0-dev) Blah blah..."               ] "v1.10.0-dev" 2
 
+        ;; non-versioning tags
+        ["aabbccd Dummy commit"
+         "bbccddee Dummy commmit2"
+         "bbccddee Dummy commmit2"
+         "bbbdddxx (tag: jenkins-myproyect_release-11) Blah blah..."
+         "bbccddee Dummy commmit2"
+         "c3bc9fx (tag: v1.10.0-dev) Blah blah..."               ] "v1.10.0-dev" 5
+
        ;; no tags:
        ["aabbccd Dummy commit1"
         "bbccdde Dummy commit2"

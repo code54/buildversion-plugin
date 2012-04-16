@@ -21,7 +21,7 @@
   "Given a seq of \"git log\" output lines, return map with :git-tag (most recent tag)
    and :git-tag-delta (number of commits to reach it)"
   (loop [i 0, lines log-lines-seq]
-    (let [[_ hash tag] (re-find #"^(\w+) .*tag: ([^\)\,]+).*" (first lines))]
+    (let [[_ hash tag] (re-find #"^(\w+) .*tag: (v[^\)\,]+).*" (first lines))]
       (if (and (not tag) (next lines))
         (recur (inc i) (next lines))
         [tag i]))))
