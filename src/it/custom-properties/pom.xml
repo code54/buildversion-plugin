@@ -24,34 +24,14 @@
                 <goals><goal>set-properties</goal></goals>
 		        <configuration>
                   <tstampFormat>yyyy-MM-dd</tstampFormat>
+                  <customProperties>
+                    { :build-tag-lowercase (clojure.string/lower-case build-tag) }
+                  </customProperties>
                 </configuration>
               </execution>
             </executions>
           </plugin>
 
-		    <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-antrun-plugin</artifactId>
-		        <executions>
-		            <execution>
-		                <id>echo-stuff</id>
-		                <phase>initialize</phase>
-		                <goals>
-		                    <goal>run</goal>
-		                </goals>
-		                <configuration>
-		                    <tasks>
-		                        <echo message="build-version: ${build-version}" />
-		                        <echo message="build-tag: ${build-tag}" />
-		                        <echo message="build-tag-delta: ${build-tag-delta}" />
-		                        <echo message="build-tstamp: ${build-tstamp}" />
-		                        <echo message="build-commit: ${build-commit}" />
-		                        <echo message="build-commit-abbrev: ${build-commit-abbrev}" />
-		                    </tasks>
-		                </configuration>
-		            </execution>
-		        </executions>
-		    </plugin>
         </plugins>
     </build>
 

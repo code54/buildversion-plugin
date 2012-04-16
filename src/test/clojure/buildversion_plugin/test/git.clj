@@ -152,7 +152,7 @@
 
 (deftest test-tstamp-format-option
   (let [actual-versions (git/infer-project-version sample-project-dir
-                                                   { "tstamp-format" "SSS"})]
+                                                   { :tstamp-format "SSS"})]
     (println actual-versions)
     (is (re-find #"000" (:build-tstamp actual-versions))
         "Always expecting 000 milliseconds. Git precision is up to seconds")))

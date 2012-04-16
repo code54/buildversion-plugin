@@ -37,10 +37,11 @@ and :git-tag-delta (number of commits -couting on first-parent paths only- from 
     (sh/destroy p)
     {:git-tag tag, :git-tag-delta delta}))
 
-(defn infer-project-version [dir {tstamp-format "tstamp-format"}]
+(defn infer-project-version [dir config-map]
   "Infer the current project version from tags on the source-control system"
 
-  (let [commit-tstamp (-> (run-git-wait dir "log -n 1 --format='%ct'")
+  (let [tstamp-format (:tstamp-format config-map)
+        commit-tstamp (-> (run-git-wait dir "log -n 1 --format='%ct'")
                           trim-newline
                           (Long/parseLong)
                           (* 1000)
