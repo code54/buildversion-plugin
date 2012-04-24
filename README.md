@@ -43,33 +43,7 @@ By default, the plugin runs on Maven's `initialize` phase. Any plugin running af
 * `build-tstamp`: A date and time stamp of the current commit (HEAD). The pattern is configurable. Example: `20120407001823`.
 
 
-The following example displays the value of those properties using the antrun plugin:
-
-```xml
-  <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-antrun-plugin</artifactId>
-    <executions>
-      <execution>
-        <id>echo-stuff</id>
-        <phase>initialize</phase>
-        <goals><goal>run</goal></goals>
-        <configuration>
-          <tasks>
-            <echo message="build-version: ${build-version}" />
-            <echo message="build-tag: ${build-tag}" />
-            <echo message="build-tag-delta: ${build-tag-delta}" />
-            <echo message="build-tstamp: ${build-tstamp}" />
-            <echo message="build-commit: ${build-commit}" />
-            <echo message="build-commit-abbrev: ${build-commit-abbrev}" />
-          </tasks>
-        </configuration>
-      </execution>
-    </executions>
-  </plugin>
-```
-
-Note: `buildversion-plugin` is currently hosted at the `oss.sonatype.org` maven
+*Note:* `buildversion-plugin` is currently hosted at the `oss.sonatype.org` maven
 repository, and may depend on artifacts on the Clojars repository. You'd need to
 add these repos to your `settings.xml` or your project `pom.xml`. Example:
 
