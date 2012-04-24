@@ -87,10 +87,28 @@ add these repos to your `settings.xml` or your project `pom.xml`. Example:
 ```
 
 
-## Configuration
+## Configuration Parameters
 
-You may configure the format for `build-tstamp` with the `tstampFormat`
-configuration option, using the pattern syntax defined by Java's [SimpleDateFormat](http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html). Example:
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Default</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>tstampFormat</td>
+    <td>yyyyMMddHHmmss</td>
+    <td>Specify a custom format for the `build-tstamp` property. Use the pattern syntax defined by Java's [SimpleDateFormat](http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html)</td>
+  </tr>
+  <tr>
+    <td>customProperties</td>
+    <td>-</td>
+    <td>Optional. A Clojure snippet of code that evaluates to a Map. You have locally define symbols for each `build-*` property. The Map returned is merged into the project properties. See below for examples.</td>
+  </tr>
+</table>
+
+
+Example 1:
 
 ```xml
   <plugin>
@@ -101,13 +119,19 @@ configuration option, using the pattern syntax defined by Java's [SimpleDateForm
       <execution>
         <goals><goal>set-properties</goal></goals>
         <configuration>
+          <!-- use only the day for the timestamp -->
           <tstampFormat>yyyy-MM-dd</tstampFormat>
+
+          <!-- Define a new project property 'build-tag-lowercase', based on 'build-tag'
+               Note how 'build-tag' is available to the script as a local variable. -->
+          <customProperties>
+            { :build-tag-lowercase (clojure.string/lower-case build-tag) }
+          </customProperties>
         </configuration>
       </execution>
     </executions>
   </plugin>
 ```
-
 
 # About git-describe
 

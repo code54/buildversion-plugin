@@ -37,8 +37,6 @@
         props (.getProperties project)
         ]
 
-    (log/warn (str "buildversion-plugin **** custom-versions map: " (pr-str custom-versions )))
-    (log/warn (str "buildversion-plugin **** versions-map : " (pr-str versions-map )))
     (log/debug (str "buildversion-plugin - Setting properties: "))
     (doseq [[prop value] versions-map]
       (log/debug (str (name prop) ": " value))
