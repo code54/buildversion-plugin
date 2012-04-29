@@ -72,17 +72,17 @@ add these repos to your `settings.xml` or your project `pom.xml`. Example:
   <tr>
     <td>tstampFormat</td>
     <td>yyyyMMddHHmmss</td>
-    <td>Specify a custom format for the `build-tstamp` property. Use the pattern syntax defined by Java's [SimpleDateFormat](http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html)</td>
+    <td>Specify a custom format for the `build-tstamp` property. Use the pattern syntax defined by Java's <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a></td>
   </tr>
   <tr>
     <td>customProperties</td>
     <td>-</td>
-    <td>Optional. A Clojure snippet of code that evaluates to a Map. You have locally define symbols for each `build-*` property. The Map returned is merged into the project properties. See below for examples.</td>
+    <td>Optional. A Clojure snippet of code you may specify in order to modify or create new properties. The code must evaluate to a Map. The name of the keys in the Map become Maven properties on the project. For convenience, for each `build-*` property you have a local variable with the same name already defined for you. See below for an example.</td>
   </tr>
 </table>
 
 
-Example 1:
+Example:
 
 ```xml
   <plugin>
@@ -128,15 +128,15 @@ Reference:
 
  * [Another explanation](http://www.xerxesb.com/2010/git-describe-and-the-tale-of-the-wrong-commits/) of this same issue with `git describe`.
  * [GIT mailing list discussion](http://kerneltrap.org/mailarchive/git/2010/9/21/40071/thread) about `git describe`'s logic and lack of `--first-parent`.
- * Here's a [working patch to add `--first-parent` to `git describe`](https://github.com/gitigit/git/tree/mrb/describe-first-parent)
+ * Here's a [working patch to add `--first-parent` to `git describe`](https://github.com/git/git/tree/mrb/describe-first-parent)
 
 ## Future
 
 Some ideas:
 
  * Find a way to inject the project version from git tags into the project's
-  pom. The goal is to get rid of the need to modify the project version inside
-  `pom.xml`: just leave a fixed 0.0.0 version and let the plugin infer it from
+  pom. The goal is to stop maintaining the project version inside
+  `pom.xml`: just leave the pom version fixed at 0.0.0 and let the plugin infer it from
   git. We tried the obvious: calling project.setVersion(), but some Maven phases
   still "see" the version that is in the `pom.xml` file. Need to research
   further.
@@ -166,4 +166,5 @@ addition. He did the heavy-lifting to integrate Clojure with Maven and Plexus.
 
 ## License
 Licensed under the [Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html).
-Copyright 2012 Code54 S.A. (http://code54.com)
+Copyright 2012 Fernando Dobladez & Code54 S.A. (http://code54.com)
+
