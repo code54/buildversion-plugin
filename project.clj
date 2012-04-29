@@ -1,4 +1,4 @@
-(defproject buildversion-maven-plugin "1.0.0-SNAPSHOT"
+(defproject buildversion-maven-plugin "1.0.1-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [org.cloudhoist/clojure-maven-mojo-annotations "0.3.2-SNAPSHOT"]
                  [org.cloudhoist/clojure-maven-mojo "0.3.2-SNAPSHOT"]

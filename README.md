@@ -23,7 +23,7 @@ Simply add `buildversion-plugin` to your pom, executing the `set-properties` goa
       <plugin>
         <groupId>com.code54.mojo</groupId>
         <artifactId>buildversion-plugin</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
         <executions>
           <execution>
             <goals><goal>set-properties</goal></goals>
@@ -88,7 +88,7 @@ Example 1:
   <plugin>
     <groupId>com.code54.mojo</groupId>
     <artifactId>buildversion-plugin</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <executions>
       <execution>
         <goals><goal>set-properties</goal></goals>
