@@ -39,8 +39,7 @@
   </scm>
 
   <properties>
-    <!-- <clojureMaven.version>0.3.2-SNAPSHOT</clojureMaven.version> -->
-    <clojureMaven.version>0.3.1</clojureMaven.version>
+    <clojureMaven.version>0.3.2</clojureMaven.version>
     <maven.version>3.0.4</maven.version>
   </properties>
 
@@ -168,11 +167,11 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- <dependency> -->
-    <!--   <groupId>org.cloudhoist</groupId> -->
-    <!--   <artifactId>clojure-maven-mojo</artifactId> -->
-    <!--   <version>${clojureMaven.version}</version> -->
-    <!-- </dependency> -->
+    <dependency>
+      <groupId>org.cloudhoist</groupId>
+      <artifactId>clojure-maven-mojo</artifactId>
+      <version>${clojureMaven.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.cloudhoist</groupId>
