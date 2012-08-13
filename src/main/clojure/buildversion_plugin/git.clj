@@ -10,12 +10,19 @@
 (defn run-git
   ([args] (run-git "." args))
   ([project-dir args] 
-     (sh/proc "bash" "-c" (str "cd " project-dir "; git " args))))
+     (apply sh/proc `("git"  ~@args :dir ~project-dir))))
 
 (defn run-git-wait
   ([args] (run-git-wait "." args))
   ([project-dir args]
-     (sh/stream-to-string (run-git project-dir args) :out)))
+     (let [proc (run-git project-dir args)
+           ok (zero? (sh/exit-code proc))
+           stdout (sh/stream-to-string proc :out)
+           stderr (sh/stream-to-string proc :err)]
+       (if ok
+         stdout
+         (throw (RuntimeException.
+                 (str "Execution of Git command failed: " stderr)))))))
 
 (defn git-describe-log-lines [log-lines-seq]
   "Given a seq of \"git log\" output lines, return map with :git-tag (most recent tag)
@@ -31,7 +38,7 @@
   "Return map with :git-tag (most recent tag on current branch (always following \"first-parent\" on merges))
 and :git-tag-delta (number of commits -couting on first-parent paths only- from :git-tag to HEAD) "
 
-  (let [p (run-git dir "log --oneline --decorate=short --first-parent")
+  (let [p (run-git dir ["log" "--oneline" "--decorate=short" "--first-parent"])
         lines (line-seq (reader (:out p)))
         [tag delta] (git-describe-log-lines lines)]
     (sh/destroy p)
@@ -41,7 +48,7 @@ and :git-tag-delta (number of commits -couting on first-parent paths only- from 
   "Infer the current project version from tags on the source-control system"
 
   (let [tstamp-format (:tstamp-format config-map)
-        commit-tstamp (-> (run-git-wait dir "log -n 1 --format='%ct'")
+        commit-tstamp (-> (run-git-wait dir ["log" "-n" "1" "--format=%ct"])
                           trim-newline
                           (Long/parseLong)
                           (* 1000)
@@ -51,7 +58,7 @@ and :git-tag-delta (number of commits -couting on first-parent paths only- from 
                                    commit-tstamp)
 
         [short-hash long-hash] (split
-                                (run-git-wait dir "log -n 1 --format='%h %H'")
+                                (run-git-wait dir [ "log" "-n" "1" "--format=%h %H" ])
                                 #" " )
 
         versioning-properties {:build-tag "N/A"

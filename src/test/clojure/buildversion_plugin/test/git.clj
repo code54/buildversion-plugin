@@ -47,7 +47,7 @@
 ;;
 (defn- get-commit-hash-by-description [descr]
   "Given a git commit description, it returns the hash of a commit matching that description"
-  (let [git (git/run-git-wait sample-project-dir (str "log --all --format=format:%H --grep='^" descr "$'"))
+  (let [git (git/run-git-wait sample-project-dir ["log" "--all" "--format=format:%H" (str "--grep=^" descr "$")])
         commit-hash git]
     (is (not (blank? commit-hash)) (str "Couldn't find hash for commit descr" descr))
     commit-hash))
@@ -56,7 +56,7 @@
   "Checkout on a particular commit and validate inferred versions match the given regexp patterns"
 
   (let [commit-hash (get-commit-hash-by-description commit-descr)
-        checkout (git/run-git sample-project-dir (str "checkout " commit-hash))
+        checkout (git/run-git sample-project-dir [ "checkout" commit-hash])
         checkout-OK (zero? (sh/exit-code checkout))
         actual-versions (git/infer-project-version sample-project-dir {})]
 
@@ -72,7 +72,7 @@
 ;;
 (deftest test-run-git
   (is (re-seq #"git version [\d\.]+"
-              (git/run-git-wait sample-project-dir "--version"))))
+              (git/run-git-wait sample-project-dir ["--version"]))))
 
 (deftest test-infer-project-versions
 
@@ -116,7 +116,7 @@
   ;; (see sample-git-project-fixture above)
   (are [commitish expected-tag expected-delta]
        (do
-         (git/run-git-wait sample-project-dir (str "checkout " commitish))
+         (git/run-git-wait sample-project-dir [ "checkout" commitish])
          (= (git/git-describe-first-parent sample-project-dir)
             {:git-tag expected-tag  :git-tag-delta expected-delta}))
 
