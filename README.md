@@ -70,6 +70,11 @@ add these repos to your `settings.xml` or your project `pom.xml`. Example:
     <th>Description</th>
   </tr>
   <tr>
+    <td>gitCmd</td>
+    <td>git</td>
+    <td>Name for 'git' executable to use. You may specify an absolute pathname or a command in you "PATH".</td>
+  </tr>
+  <tr>
     <td>tstampFormat</td>
     <td>yyyyMMddHHmmss</td>
     <td>Specify a custom format for the `build-tstamp` property. Use the pattern syntax defined by Java's <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a></td>

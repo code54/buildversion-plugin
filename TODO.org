@@ -7,6 +7,9 @@
 *** DONE write basic assertion (verify.sh) to validate Mojo's output
 ** DONE Clean up Mojo's output on execution.
 ** SOMEDAY Improve error handling? (need more test cases?)
+*** DONE Don't depend on bash
+*** DONE On debug (-X) print forked commands to stdout
+*** DONE On debug (-X) pring lines as they are processed by git-describe-log-lines
 ** TODO Write example pom.xml/project (may be same as integration test?)
 *** add filtering of propeties file
 *** add field on jar MANIFEST
@@ -31,7 +34,7 @@
 * TODO Generalize protocol for potential non-git implementations
 ** see https://github.com/Raynes/bultitude
 * SOMEDAY Learn more about Plexus and how Maven uses it
-* TODO Propose a defmojo macro for clojure-maven project?
+* Propose a defmojo macro for clojure-maven project?
 ** DONE Implement
 (defmojo
   "This is an example Maven Plugin written in Clojure"

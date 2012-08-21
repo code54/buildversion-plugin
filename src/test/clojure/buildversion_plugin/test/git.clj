@@ -74,6 +74,15 @@
   (is (re-seq #"git version [\d\.]+"
               (git/run-git-wait sample-project-dir ["--version"]))))
 
+(deftest test-run-git-invalid-path
+  (binding [git/*git-cmd* "/invalid/path/to/git"]
+    (is (thrown-with-msg? Exception #"/invalid/path/to/git"
+          (git/run-git-wait sample-project-dir ["--version"])))))
+
+(deftest test-run-git-invalid-arguments
+  (is (thrown-with-msg? RuntimeException #"Git command failed"
+        (git/run-git-wait sample-project-dir ["--invalid-argument-here"]))))
+
 (deftest test-infer-project-versions
 
   (assert-for-commit "First tagged commit"
@@ -148,6 +157,12 @@
        ["aabbccd Dummy commit1"
         "bbccdde Dummy commit2"
         "ccddeef Dymmy commit3"] nil 2))
+
+(deftest test-git-describe-first-parent--unexpected-output
+
+  (let [lines ["unexpected" "output" "from" "git"]]
+    (git/git-describe-log-lines lines)))
+
 
 
 (deftest test-tstamp-format-option
