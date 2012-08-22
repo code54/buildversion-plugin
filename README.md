@@ -50,14 +50,21 @@ add these repos to your `settings.xml` or your project `pom.xml`. Example:
 ```xml
   <pluginRepositories>
     <pluginRepository>
-      <id>sonatype-snapshots</id>
+      <id>sonatype-releases</id>
       <url>http://oss.sonatype.org/content/repositories/releases</url>
     </pluginRepository>
     <pluginRepository>
       <id>clojars.org</id>
       <url>http://clojars.org/repo</url>
     </pluginRepository>
+
+    <!-- If you want to try SNAPSHOT versions, you need Sonatype's snapshots repo: -->
+    <pluginRepository>
+      <id>sonatype-snapshots</id>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    </pluginRepository>
   </pluginRepositories>
+  
 ```
 
 
