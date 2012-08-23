@@ -22,6 +22,9 @@
   [project       {:expression "${project}"
                   :required true
                   :readonly true}
+   base-dir      {:expression "${basedir}"
+                  :required true
+                  :readonly true}
    tstamp-format {:alias    "tstampFormat"
                   :default  "yyyyMMddHHmmss"
                   :typename "java.lang.String"}
@@ -33,7 +36,7 @@
 
   ;; Goal execution
   (let [log-debug #(.debug log/*plexus-log* (str "[buildversion-plugin] " %))
-        git-versions (git/infer-project-version "."
+        git-versions (git/infer-project-version base-dir
                                                 {:tstamp-format tstamp-format
                                                  :git-cmd (or git-cmd "git")
                                                  :debug-fn log-debug } )
