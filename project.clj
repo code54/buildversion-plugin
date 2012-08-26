@@ -16,4 +16,5 @@
   :target-dir "/home/ferd/repos/buildversion-plugin/target"
   :min-lein-version "2.0.0"
   :plugins [[lein-swank "1.4.4"] [lein-pprint "1.1.1"]]
-  :test-paths ["src/test/clojure"])
+  :test-paths ["src/test/clojure"]
+  :warn-on-reflection true)
