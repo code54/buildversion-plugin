@@ -1,5 +1,9 @@
 # Release Notes - buildversion-plugin
 
+## v1.0.2
+
+* Improve release scripts
+
 ## v1.0.1 
 
 * New gitCmd option let's you specify location of 'git' command to use
