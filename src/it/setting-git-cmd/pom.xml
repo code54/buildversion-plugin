@@ -23,10 +23,7 @@
               <execution>
                 <goals><goal>set-properties</goal></goals>
 		        <configuration>
-                  <tstampFormat>yyyy-MM-dd</tstampFormat>
-                  <customProperties>
-                    { :build-commit-uppercase (clojure.string/upper-case build-commit) }
-                  </customProperties>
+                  <gitCmd>./git.sh</gitCmd>
                 </configuration>
               </execution>
             </executions>

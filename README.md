@@ -23,7 +23,7 @@ Simply add `buildversion-plugin` to your pom, executing the `set-properties` goa
       <plugin>
         <groupId>com.code54.mojo</groupId>
         <artifactId>buildversion-plugin</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <executions>
           <execution>
             <goals><goal>set-properties</goal></goals>
@@ -50,14 +50,21 @@ add these repos to your `settings.xml` or your project `pom.xml`. Example:
 ```xml
   <pluginRepositories>
     <pluginRepository>
-      <id>sonatype-snapshots</id>
+      <id>sonatype-releases</id>
       <url>http://oss.sonatype.org/content/repositories/releases</url>
     </pluginRepository>
     <pluginRepository>
       <id>clojars.org</id>
       <url>http://clojars.org/repo</url>
     </pluginRepository>
+
+    <!-- If you want to try SNAPSHOT versions, you need Sonatype's snapshots repo: -->
+    <pluginRepository>
+      <id>sonatype-snapshots</id>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    </pluginRepository>
   </pluginRepositories>
+  
 ```
 
 
@@ -68,6 +75,11 @@ add these repos to your `settings.xml` or your project `pom.xml`. Example:
     <th>Property</th>
     <th>Default</th>
     <th>Description</th>
+  </tr>
+  <tr>
+    <td>gitCmd</td>
+    <td>git</td>
+    <td>Name for 'git' executable to use. You may specify an absolute pathname or a command in you "PATH".</td>
   </tr>
   <tr>
     <td>tstampFormat</td>
@@ -88,7 +100,7 @@ Example:
   <plugin>
     <groupId>com.code54.mojo</groupId>
     <artifactId>buildversion-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <executions>
       <execution>
         <goals><goal>set-properties</goal></goals>

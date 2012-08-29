@@ -6,7 +6,9 @@ def build_log = new File("target/it/custom-properties/build.log").text
 
 boolean tstamp = (build_log =~ /build-tstamp: \d\d\d\d-\d\d-\d\d/)
 
-boolean customLowerCaseProperty = ( build_log =~ /build-tag-lowercase: n\/a/ )
 
-return tstamp && customLowerCaseProperty
+// expect an all-uppercased git commit hash 
+boolean customProperty = ( build_log =~ /build-commit-uppercase: [0-9A-F]{40}/ )
+
+return tstamp && customProperty
 

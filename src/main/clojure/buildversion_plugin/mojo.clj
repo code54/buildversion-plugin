@@ -19,31 +19,40 @@
   {:goal "set-properties" :phase "initialize" }
 
   ;; Mojo parameters
-  
-  [project  {:expression "${project}" :required true :readonly true}
-
-   tstamp-format {:alias "tstampFormat" :default "yyyyMMddHHmmss"
+  [project       {:expression "${project}"
+                  :required true
+                  :readonly true}
+   base-dir      {:expression "${basedir}"
+                  :required true
+                  :readonly true}
+   tstamp-format {:alias    "tstampFormat"
+                  :default  "yyyyMMddHHmmss"
                   :typename "java.lang.String"}
-
-   custom-script {:alias "customProperties" :typename "java.lang.String"} ]
-
+   custom-script {:alias    "customProperties"
+                  :typename "java.lang.String"}
+   git-cmd       {:alias    "gitCmd"
+                  :default  "git"
+                  :typename "java.lang.String"}   ]
 
   ;; Goal execution
-  (let [git-versions (git/infer-project-version "." {:tstamp-format tstamp-format} )
-        custom-versions (if custom-script
-                          (eval-custom-script git-versions custom-script)
-                          {})
-        versions-map (merge git-versions custom-versions)
-        props (.getProperties project)
-        ]
+  (let [log-fn #(.debug log/*plexus-log* (str "[buildversion-plugin] " %))
+        inferred-props (git/infer-project-version base-dir
+                                                {:tstamp-format tstamp-format
+                                                 :git-cmd (or git-cmd "git")
+                                                 :debug-fn log-fn } )
+        final-props (if custom-script
+                      (merge inferred-props
+                             (eval-custom-script inferred-props custom-script))
+                      inferred-props)
+        maven-project-props (.getProperties project)]
 
-    (log/debug (str "buildversion-plugin - Setting properties: "))
-    (doseq [[prop value] versions-map]
-      (log/debug (str (name prop) ": " value))
-      (.put props (name prop) value))))
+    (log-fn "Setting properties: ")
+    (doseq [[prop value] final-props]
+      (log-fn (str (name prop) ": " value))
+      (.put maven-project-props (name prop) value))))
 
 
+    ;; injecting project version does not work well :-(
+    ; (if-let [ver (:build-tag final-props)]
+    ;   (.setVersion project))
 
-
-    ;; injecting project version does not working well :-(
-    ;; (.setVersion project (:maven-artifact-version versions-map))
