@@ -17,8 +17,14 @@ echo -n "commiting release notes and readme.  enter to continue:" && read x \
 && echo -n "Peform release.  enter to continue:" && read x \
 && mvn release:clean \
 && mvn release:prepare -Dgpg.keyname=02FCB552 \
-&& mvn release:perform -Dgpg.keyname=02FCB552 \
+&& git checkout develop; git merge "release-${new-version}" \
+&& git checkout master; git merge "v${new-version}" \
+&& mvn release:perform -Dgpg.keyname=02FCB552
+
+# \
 #&& mvn nexus:staging-close \
 #&& mvn nexus:staging-promote \
-&& git flow release finish -n $version
+
+
+#&& git flow release finish -n $version
 
