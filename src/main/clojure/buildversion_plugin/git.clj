@@ -71,7 +71,7 @@
           [short-hash long-hash]  (split
                                    (run-git-wait dir
                                                  ["log" "-n" "1" "--format=%h %H"])
-                                   #" ")
+                                   #"\s+")
 
           versioning-properties {:build-tag "N/A"
                                  :build-version "N/A"
