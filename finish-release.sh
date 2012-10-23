@@ -14,11 +14,11 @@ echo "finish release of $version"
 echo -n "Peform release.  enter to continue:" && read x \
 && mvn release:clean \
 && mvn release:prepare -Dgpg.keyname=02FCB552 \
-&& git checkout develop; git merge "release-${version}" \
-&& git checkout master; git merge "v${version}" \
 && mvn release:perform -Dgpg.keyname=02FCB552 \
 && mvn nexus:staging-close \
-&& mvn nexus:staging-promote
+&& mvn nexus:staging-promote \
+&& git checkout develop; git merge "release-${version}" \
+&& git checkout master; git merge "v${version}" \
 
 
 #&& git flow release finish -n $version
