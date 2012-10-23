@@ -15,15 +15,19 @@ echo "Start release of $version, previous version is $previous_version"
 echo ""
 echo ""
 
-git flow release start $version || exit 1
+git co -b "release-$version" || exit 1
+
+#git flow release start $version || exit 1
 
 echo ""
 echo ""
 echo "Changes since $previous_version"
-git log --online  v$previous_version..
+git log --oneline  v$previous_version..
 echo ""
 echo ""
-echo "Now edit ReleaseNotes and README"
+echo "Press [enter] to edit ReleaseNotes and README..."
+read
+
 
 $EDITOR ReleaseNotes.md
 $EDITOR README.md

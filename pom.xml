@@ -11,7 +11,7 @@
 
   <groupId>com.code54.mojo</groupId>
   <artifactId>buildversion-plugin</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <packaging>maven-plugin</packaging>
 
   <name>buildversion-plugin</name>
@@ -35,7 +35,7 @@
     <connection>scm:git:git://github.com/code54/buildversion-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com:code54/buildversion-plugin.git</developerConnection>
     <url>https://github.com/code54/buildversion-plugin</url>
-    <tag>v1.0.1</tag>
+    <tag>v1.0.2</tag>
   </scm>
 
   <properties>

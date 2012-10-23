@@ -62,7 +62,7 @@
 
     (is checkout-OK (str "Checkout failure " (checkout :err) ))
 
-    (doall (map (fn [key] (is (re-find (expected-patterns key) (actual-versions key))
+    (doall (map (fn [key] (is (re-matches (expected-patterns key) (actual-versions key))
                               (str "Testing " key " for commit '" commit-descr "'")))
                 (keys expected-patterns)))))
 
@@ -94,7 +94,7 @@
                       })
 
   (assert-for-commit "dev commit 5"
-                     {:build-version      #"1.1.0-SNAPSHOT-3"
+                     {:build-version      #"1.1.0-SNAPSHOT-3.*"
                       :build-tag   #"^1.1.0-SNAPSHOT$"
                       :build-tag-delta        #"3"
                       :build-tstamp           #"\d+"
