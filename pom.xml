@@ -237,9 +237,9 @@
     </dependency>
 
     <dependency>
-      <groupId>conch</groupId>
+      <groupId>me.raynes</groupId>
       <artifactId>conch</artifactId>
-      <version>0.2.1</version>
+      <version>0.3.1</version>
     </dependency>
   </dependencies>
 
