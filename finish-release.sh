@@ -11,7 +11,7 @@ version=$1
 
 echo "finish release of $version"
 
-echo -n "Peform release.  enter to continue:" && read x \
+echo -n "Perform release.  enter to continue:" && read x \
 && mvn release:clean \
 && mvn release:prepare -Dgpg.keyname=02FCB552 \
 && mvn release:perform -Dgpg.keyname=02FCB552 \
