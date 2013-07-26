@@ -25,9 +25,11 @@ echo "Changes since $previous_version"
 git log --oneline  v$previous_version..
 echo ""
 echo ""
-echo "Press [enter] to edit ReleaseNotes and README..."
+echo "Press [enter] to edit ReleaseNotes and README and other files refering to version number..."
 read
 
 
 $EDITOR ReleaseNotes.md
 $EDITOR README.md
+$EDITOR src/it/setting-git-cmd/pom.xml src/it/custom-properties/pom.xml src/it/simple-project/pom.xml
+

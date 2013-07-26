@@ -1,5 +1,9 @@
 # Release Notes - buildversion-plugin
 
+## v1.0.3
+
+* [issue #6] Update conch dependency version. Hopefully breaking dependency on clojars.org repo at runtime
+
 ## v1.0.2
 
 * [issue #4] Ignore newline from git --format's output
