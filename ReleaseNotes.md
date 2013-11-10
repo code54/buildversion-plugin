@@ -1,5 +1,9 @@
 # Release Notes - buildversion-plugin
 
+## v1.0.4
+
+* Breaking change: `build-version` now equals `build-tag` when HEAD there's a tag that points directly to HEAD (that is, when `build-tag-delta` is `0`)
+
 ## v1.0.3
 
 * [issue #6] Update conch dependency version. Hopefully breaking dependency on clojars.org repo at runtime
