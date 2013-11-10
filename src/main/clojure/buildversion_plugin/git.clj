@@ -79,15 +79,18 @@
                                  :build-tstamp commit-tstamp-str
                                  :build-commit long-hash
                                  :build-commit-abbrev short-hash }
-          
+
           {:keys [git-tag git-tag-delta] } (git-describe-first-parent dir)]
 
       (if (nil? git-tag)
         versioning-properties
-        
-        (let [maven-artifact-version ((re-find #"v(.*)" git-tag) 1)]
+
+        (let [maven-artifact-version ((re-find #"v(.*)" git-tag) 1)
+              version (replace-first git-tag #"^v" "")]
           (merge versioning-properties
                  {:build-tag maven-artifact-version
-                  :build-version (str (replace-first git-tag #"^v" "") "-"
-                                      git-tag-delta "-" short-hash)
+                  :build-version (if (== git-tag-delta 0)
+                                   version
+                                   (str version "-"
+                                        git-tag-delta "-" short-hash))
                   :build-tag-delta (str git-tag-delta) }))))))

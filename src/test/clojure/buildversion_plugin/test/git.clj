@@ -86,7 +86,7 @@
 (deftest test-infer-project-versions
 
   (assert-for-commit "First tagged commit"
-                     {:build-version    #"^1.0.0-SNAPSHOT-0.*"
+                     {:build-version    #"^1.0.0-SNAPSHOT$"
                       :build-tag #"^1.0.0-SNAPSHOT$"
                       :build-tag-delta      #"0"
                       :build-tstamp         #"\d+"

@@ -39,7 +39,7 @@ By default, the plugin runs on Maven's `initialize` phase. Any plugin running af
 * `build-tag-delta`: Number of commits since the closest tag until HEAD. Example: `2`
 * `build-commit`: Full hash of current commit (HEAD). Example: `c154712b8cea9da812c52f269578a458911f24cc`
 * `build-commit-abbrev`: Abbreviated hash of current commit (HEAD). Example: `c154712`
-* `build-version`: Full descriptive version of current build. Includes closest tag, tag delta, and abbreviated commit hash. Example: `1.2.0-SNAPSHOT-2-c154712`
+* `build-version`: Descriptive version of current build. If a tag points to HEAD (that is, build-tag-delta is "0") then `build-version` equals `build-tag`; otherwise, it'll include: the closest tag, tag delta, and abbreviated commit hash. Examples: `1.2.0-SNAPSHOT` (tag points to HEAD),  `1.2.0-SNAPSHOT-2-c154712` (HEAD is two commits ahead of tag)
 * `build-tstamp`: A date and time stamp of the current commit (HEAD). The pattern is configurable. Example: `20120407001823`.
 
 
