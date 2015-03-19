@@ -56,13 +56,10 @@
 	      (log-fn (str (name prop) ": " value))
 	      (.put maven-project-props (name prop) value)))
 	      
-	(catch RuntimeException e
+	(catch Throwable e
 		(if (false? fail-on-error)
-			(if (.contains (.getMessage e) "Not a git repository")
-				(println "!!! Not a Git repository : failOnError parameter false : exit plugin without error")
-				(throw e))
+			(println "[WARNING]" (.getMessage e) ": failOnError parameter false : exit plugin without error")
 	    	(throw e)))))
-	
 	
 	    ;; injecting project version does not work well :-(
 	    ; (if-let [ver (:build-tag final-props)]
