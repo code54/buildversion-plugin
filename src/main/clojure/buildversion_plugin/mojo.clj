@@ -32,27 +32,36 @@
                   :typename "java.lang.String"}
    git-cmd       {:alias    "gitCmd"
                   :default  "git"
-                  :typename "java.lang.String"}   ]
+                  :typename "java.lang.String"}
+   fail-on-error {:alias    "failOnError"
+                  :default  true
+                  :typename "java.lang.Boolean"}   ]
 
   ;; Goal execution
-  (let [log-fn #(.debug log/*plexus-log* (str "[buildversion-plugin] " %))
-        inferred-props (git/infer-project-version base-dir
-                                                {:tstamp-format tstamp-format
-                                                 :git-cmd (or git-cmd "git")
-                                                 :debug-fn log-fn } )
-        final-props (if custom-script
-                      (merge inferred-props
-                             (eval-custom-script inferred-props custom-script))
-                      inferred-props)
-        maven-project-props (.getProperties project)]
-
-    (log-fn "Setting properties: ")
-    (doseq [[prop value] final-props]
-      (log-fn (str (name prop) ": " value))
-      (.put maven-project-props (name prop) value))))
-
-
-    ;; injecting project version does not work well :-(
-    ; (if-let [ver (:build-tag final-props)]
-    ;   (.setVersion project))
+  (try
+	  (let [log-fn #(.debug log/*plexus-log* (str "[buildversion-plugin] " %))
+	
+	        inferred-props (git/infer-project-version base-dir
+	                                                {:tstamp-format tstamp-format
+	                                                 :git-cmd (or git-cmd "git")
+	                                                 :debug-fn log-fn} )
+	        final-props (if custom-script
+	                      (merge inferred-props
+	                             (eval-custom-script inferred-props custom-script))
+	                      inferred-props)
+	        maven-project-props (.getProperties project)]
+	
+	    (log-fn "Setting properties: ")
+	    (doseq [[prop value] final-props]
+	      (log-fn (str (name prop) ": " value))
+	      (.put maven-project-props (name prop) value)))
+	      
+	(catch Throwable e
+		(if (false? fail-on-error)
+			(println "[WARNING]" (.getMessage e) ": failOnError parameter false : exit plugin without error")
+	    	(throw e)))))
+	
+	    ;; injecting project version does not work well :-(
+	    ; (if-let [ver (:build-tag final-props)]
+	    ;   (.setVersion project))
 
