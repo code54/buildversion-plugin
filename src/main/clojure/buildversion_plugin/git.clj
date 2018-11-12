@@ -5,7 +5,7 @@
    [clojure.java.io :only [reader]]
    [clojure.string :only [trim-newline replace-first split join]] )
   (:require
-   [conch.core :as sh] ))
+   [me.raynes.conch.low-level :as sh] ))
 
 
 (def ^:dynamic *debug-fn* #(println %))

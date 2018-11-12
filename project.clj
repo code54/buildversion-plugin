@@ -2,11 +2,11 @@
   :compile-path "target/classes"
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.cloudhoist/clojure-maven-mojo-annotations
-                  "0.3.2"]
-                 [org.cloudhoist/clojure-maven-mojo "0.3.2"]
-                 [org.apache.maven/maven-plugin-api "3.0.3"]
-                 [org.clojure/tools.trace "0.7.1"]
-                 [conch "0.2.1"]]
+                  "0.3.3"]
+                 [org.cloudhoist/clojure-maven-mojo "0.3.3"]
+                 [org.apache.maven/maven-plugin-api "3.5.4"]
+                 [org.clojure/tools.trace "0.7.10"]
+                 [me.raynes/conch "0.8.0"]]
   :source-paths ["src/main/clojure"]
   :jar-dir "target"
   :profiles {:dev {:dependencies [[radagast "1.1.0"]]}}

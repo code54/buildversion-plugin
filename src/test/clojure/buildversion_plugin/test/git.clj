@@ -3,7 +3,7 @@
         [clojure.string :only [trim-newline blank?] ]
 ;        clojure.tools.trace
         clojure.test)
-  (:require [conch.core :as sh]
+  (:require [me.raynes.conch.low-level :as sh]
             :reload [buildversion-plugin.git :as git]))
 
 ;; These system properties are set in the pom.xml by mvn's zi:test's "initScript".
