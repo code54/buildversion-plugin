@@ -1,6 +1,6 @@
-  :dependencies [[org.clojure/clojure "1.3.0"]
 (defproject buildversion-maven-plugin/buildversion-maven-plugin "1.1-SNAPSHOT" 
   :compile-path "target/classes"
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.cloudhoist/clojure-maven-mojo-annotations
                   "0.3.2"]
                  [org.cloudhoist/clojure-maven-mojo "0.3.2"]
