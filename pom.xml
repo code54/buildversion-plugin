@@ -243,4 +243,25 @@
     </dependency>
   </dependencies>
 
+  <repositories>
+    <repository>
+      <id>sonatype-releases</id>
+      <url>https://oss.sonatype.org/content/repositories/releases</url>
+    </repository>
+    <repository>
+      <id>clojars.org</id>
+      <url>https://clojars.org/repo</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype-releases</id>
+      <url>https://oss.sonatype.org/content/repositories/releases</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>clojars.org</id>
+      <url>https://clojars.org/repo</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
