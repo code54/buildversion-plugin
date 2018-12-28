@@ -3,6 +3,11 @@
 echo "Running $0 ..."
 TARGET_DIR="$1"
 
+git config alias.co checkout
+git config alias.br branch
+git config alias.ci commit
+git config alias.st status
+
 #rm -rf $TARGET_DIR
 mkdir -p $TARGET_DIR
 cd $TARGET_DIR
