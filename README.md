@@ -53,10 +53,6 @@ add these repos to your `settings.xml` or your project `pom.xml`. Example:
       <id>sonatype-releases</id>
       <url>http://oss.sonatype.org/content/repositories/releases</url>
     </pluginRepository>
-    <pluginRepository>
-      <id>clojars.org</id>
-      <url>http://clojars.org/repo</url>
-    </pluginRepository>
 
     <!-- If you want to try SNAPSHOT versions, you need Sonatype's snapshots repo: -->
     <pluginRepository>
@@ -64,7 +60,7 @@ add these repos to your `settings.xml` or your project `pom.xml`. Example:
       <url>http://oss.sonatype.org/content/repositories/snapshots</url>
     </pluginRepository>
   </pluginRepositories>
-  
+
 ```
 
 
@@ -179,4 +175,3 @@ addition. He did the heavy-lifting to integrate Clojure with Maven and Plexus.
 ## License
 Licensed under the [Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html).
 Copyright 2012 Fernando Dobladez & Code54 S.A. (http://code54.com)
-

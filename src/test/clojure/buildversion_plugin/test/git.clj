@@ -3,7 +3,7 @@
         [clojure.string :only [trim-newline blank?] ]
 ;        clojure.tools.trace
         clojure.test)
-  (:require [me.raynes.conch.low-level :as sh]
+  (:require [buildversion-plugin.shell :as sh]
             :reload [buildversion-plugin.git :as git]))
 
 ;; These system properties are set in the pom.xml by mvn's zi:test's "initScript".
@@ -27,17 +27,17 @@
 
   (if (.isDirectory (file (str sample-project-dir "/.git")))
     (println "Example GIT project dir found... re-using it")
-    
+
     (let [script (sh/proc (str maven-bash-source-dir "/create-sample-git-project.sh") sample-project-dir)
           exit-OK (zero? (sh/exit-code script)) ]
-      
+
       (println "Building example GIT project for testing...")
       (println (script :out))
 
       (if-not exit-OK (println (script :err)))
       (is exit-OK)))
 
-  
+
   (run-tests-fn))
 
 (use-fixtures :once sample-git-project-fixture)
@@ -139,7 +139,7 @@
 
        ["aa44944 (HEAD, tag: v9.9.9, origin/master, master) ..."] "v9.9.9"      0
        ["c3bc9ff (tag: v1.11.0) TMS: Add..."                    ] "v1.11.0"     0
-       ["c3bc9fx (tag: v1.10.0-dev) Blah blah..."               ] "v1.10.0-dev" 0 
+       ["c3bc9fx (tag: v1.10.0-dev) Blah blah..."               ] "v1.10.0-dev" 0
 
        ["aabbccd Dummy commit"
         "bbccddee Dummy commmit2"
@@ -171,4 +171,3 @@
     (println actual-versions)
     (is (re-find #"000" (:build-tstamp actual-versions))
         "Always expecting 000 milliseconds. Git precision is up to seconds")))
-

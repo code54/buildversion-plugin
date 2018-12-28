@@ -5,13 +5,12 @@
                   "0.3.3"]
                  [org.cloudhoist/clojure-maven-mojo "0.3.3"]
                  [org.apache.maven/maven-plugin-api "3.5.4"]
-                 [org.clojure/tools.trace "0.7.10"]
-                 [me.raynes/conch "0.8.0"]]
+                 [org.clojure/tools.trace "0.7.10"]]
   :source-paths ["src/main/clojure"]
   :jar-dir "target"
   :profiles {:dev {:dependencies [[radagast "1.1.0"]]}}
   :repositories {"sonatype-releases"
-                 "http://oss.sonatype.org/content/repositories/releases"}
+                 "https://oss.sonatype.org/content/repositories/releases"}
   :resource-paths ["src/main/resource"]
   :target-dir "target"
   :min-lein-version "2.0.0"
