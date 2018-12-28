@@ -1,38 +1,40 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                         http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.code54.mojo</groupId>
-	<artifactId>buildversion-plugin-example</artifactId>
-	<version>9.9.99</version>
+  <groupId>com.code54.mojo</groupId>
+  <artifactId>buildversion-plugin-example</artifactId>
+  <version>9.9.99</version>
 
-	<name>Build version project example</name>
-	<organization>
-		<name>Code54</name>
-		<url>http://code54.com</url>
-	</organization>
+  <name>Build version project example</name>
+  <organization>
+    <name>Code54</name>
+    <url>http://code54.com</url>
+  </organization>
 
-    <build>
-        <plugins>
-          <plugin>
-            <groupId>com.code54.mojo</groupId>
-            <artifactId>buildversion-plugin</artifactId>
-            <version>1.0.3</version>
-            <executions>
-              <execution>
-                <goals><goal>set-properties</goal></goals>
-		        <configuration>
-                  <tstampFormat>yyyy-MM-dd</tstampFormat>
-                  <customProperties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.code54.mojo</groupId>
+        <artifactId>buildversion-plugin</artifactId>
+        <version>1.1-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>set-properties</goal>
+            </goals>
+            <configuration>
+              <tstampFormat>yyyy-MM-dd</tstampFormat>
+              <customProperties>
                     { :build-commit-uppercase (clojure.string/upper-case build-commit) }
-                  </customProperties>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
+              </customProperties>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
-        </plugins>
-    </build>
+    </plugins>
+  </build>
 
 </project>
