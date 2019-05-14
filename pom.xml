@@ -39,7 +39,7 @@
   </scm>
 
   <properties>
-    <clojureMaven.version>0.3.2</clojureMaven.version>
+    <clojureMaven.version>0.3.3</clojureMaven.version>
     <maven.version>3.0.4</maven.version>
   </properties>
 
